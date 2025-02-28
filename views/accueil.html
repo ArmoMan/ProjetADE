@@ -3,18 +3,40 @@
 
 <head>
     <title>Acceuil</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/graph.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
     <style>
         body {
             font-family: 'Kanit', sans-serif;
         }
     </style>
-</head>
+</head> 
 
+<!--
+https://www.chartjs.org/docs/latest/general/data-structures.html
+const cfg = {
+  type: 'line',
+  data: {
+    datasets: [{
+      data: [{x: '2016-12-25', y: 20}, {x: '2016-12-26', y: 10}]
+    }]
+  }
+}
+  
+https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html
+
+-->
+ 
 <body>
 
     <h1>Page d'acceuil</h1>
+    <div id="containerGraphSimple">
+
+    </div>
+    <!-- <canvas id="graphiqueSimple" class="graphe-lineaire" aria-label="chart" role="img"></canvas> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/logiqueGraphique.js"></script>
 
 </body>
 
