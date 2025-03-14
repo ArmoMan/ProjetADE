@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/button.css">
+    <title>Cle API</title>
+</head>
+<body>
+
+    <div class="container-api"> 
+        <h1>Voici votre cle API: </h1>
+        <p>Cliquez sur la clé pour copier le texte</p>
+        <p id="messageAPI" style="color: rgb(85, 220, 85); display: none; background-color: white;">Texte copié</p>
+        <% if (cle_api) { %>
+            <h2 onclick="copierTexte()" id="texteAPI"><%= cle_api %></h2>
+        <% } else { %>
+            <p>Erreur dans creation de la cle API</p>
+        <% } %>
+
+        <button onclick="changerPage()" class="button-normal button-centre">Suivant</button>
+    </div>
+
+    <style>
+        .container-api{
+            width: 60%;
+            margin-left: 20%;
+            margin-top: 15%;
+            /* background-color: rgb(0, 162, 255); */
+            background-color: #40B0B4;
+            border-radius: 30px;
+            border: 2px solid black;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .container-api h2:hover{
+            cursor: pointer;
+            background-color: #BDE0E1;
+        }
+    </style>
+
+    <script>
+        function changerPage(){
+            window.location.href = "/utilisateur/accueil";
+        }
+
+        function copierTexte(){
+            // copier le texte
+            let texteApi = document.getElementById("texteAPI");
+            navigator.clipboard.writeText(texteApi.textContent)
+
+            // montrer message
+            montrerMessage();
+        }
+
+        // fonction pour afficher le message pour 3 secondes
+        function montrerMessage(){
+            let messageAPI = document.getElementById("messageAPI");
+            messageAPI.style.display = "block";
+
+            setTimeout(()=>{
+                messageAPI.style.display = "none";
+            }, 3000)
+        }
+    </script>
+</body>
+</html>

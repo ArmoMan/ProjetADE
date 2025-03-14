@@ -1,0 +1,13 @@
+<nav class="nav-bar"> 
+    <h2><a href="/" style="text-decoration: none; color: black;">Projet ADE</a></h2>
+    <ul>
+        <% if(estConnecter){ %>
+            <li><a href="/utilisateur/accueil">Regarder Donnees</a></li>
+            <li><a href="/utilisateur/pageAPI">Voir cle API</a></li>
+        <% } %>
+        <% if(!estConnecter){ %>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>

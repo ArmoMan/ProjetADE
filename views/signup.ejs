@@ -4,25 +4,23 @@
 <head>
     <title>Creation de compte</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/button.css">
+    <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
-    <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-        }
-    </style>
 </head>
 
 <body>
-    <h1>Projet ADE</h1>
+    <%- include('composants/navbar') %> 
 
-    <div class="body">
-
-
-        <div class="container">
+    <div class="login-signup-container">
+        <h1>Projet ADE</h1>
+        <div class="container-compte">
             <h2>Creation de compte</h2>
             <p>Entrez les identifiants que vous voulez afin de creer votre compte:</p>
-
-            <form action="login" method="POST">
+            <% if(erreur){ %>
+                <p style="background-color: red;"><%= erreur %> </p>
+            <% } %>
+            <form action="signup" method="POST">
 
                 <label>Courriel:</label><br>
                 <input type="email" id="email" name="email" placeholder="Entrez votre courriel" required><br>
@@ -35,14 +33,14 @@
 
                 <br>
 
-                <input type="submit" value="Creez votre compte">
+                <input type="submit" value="Creez votre compte" class="button-normal button-centre">
 
 
             </form>
 
             <div class="item">
                 <p>Vous avez un compte?</p>
-                <a href="login" class="button_normal">Connectez vous</a>
+                <a href="login" class="button-normal">Connectez vous</a>
             </div>
 
         </div>
