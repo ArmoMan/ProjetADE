@@ -1,0 +1,22 @@
+
+.button-normal {
+    padding: 5px;
+    /* background-color:lightgray; */
+    background-color: #BDE0E1;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.button-centre{
+    margin: auto;
+    display: block;
+}
+.button-normal:hover {
+    padding: 5px;
+    cursor: pointer;
+    background-color: grey;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
