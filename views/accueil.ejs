@@ -2,16 +2,18 @@
 <html>
 
 <head>
-    <title>Acceuil</title>
-    <link rel="stylesheet" type="text/css" href="/css/graph.css">
-    <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
-    <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-        }
-    </style>
-</head> 
+  <title>Acceuil</title>
+  <link rel="stylesheet" type="text/css" href="/css/graph.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/capteur.css">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+    }
+  </style>
+</head>
 
 <!--
 https://www.chartjs.org/docs/latest/general/data-structures.html
@@ -27,11 +29,120 @@ const cfg = {
 https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html
 
 -->
- 
+
 <body>
-    <%- include('composants/navbar') %> 
+  <%- include('composants/navbar') %>
 
     <h1>Page d'acceuil</h1>
+
+
+    <div class="container">
+
+      <div class="capteur">
+        <div class="nom-forme">Nom du capteur</div>
+        <div class="nom-forme">Nom de la donnée</div>
+        <div class="valeur-donne">x</div>
+      </div>
+
+      <div class="capteur">
+        <div class="nom-forme">Nom du capteur</div>
+        <div class="nom-forme">Nom de la donnée</div>
+        <div class="valeur-donne">x</div>
+
+      </div>
+      <div class="capteur">
+        <div class="nom-forme">Nom du capteur</div>
+        <div class="nom-forme">Nom de la donnée</div>
+        <div class="valeur-donne">x</div>
+      </div>
+
+    </div>
+
+
+
+    <div class="graph-section">
+
+      <div class="graph-container-all">
+        <div class="graph-container-1">
+          <canvas id="graphique"></canvas>
+
+          <div class="graph-buttons">
+            <button id="btnMediane">Voir la mediane</button>
+            <button id="btnNormal">Voir le graphique normal</button>
+          </div>
+        </div>
+
+        <div class="graph-stats">
+          <p>Moy: x</p>
+          <p>Max: x</p>
+          <p>Min: x</p>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+    <div class="graph-section">
+
+
+      <div class="data-selection">
+        <label>Quelles données voir</label>
+        <input type="checkbox" id="ph" name="ph">
+        <label for="ph">PH</label>
+        <input type="checkbox" id="temperature" name="temperature">
+        <label for="temperature">Température eau</label>
+
+      </div>
+
+      <div class="graph-container-all">
+
+
+        <div class="graph-container-2">
+          <canvas id="graphique"></canvas>
+
+          <div class="graph-buttons">
+            <button>Voir jour</button>
+            <button>Voir nuit</button>
+            <button>Voir 24h</button>
+          </div>
+        </div>
+
+        <div class="stats-container">
+
+          <div class="graph-stats">
+            <p>Légende</p>
+            <p>Rouge - PH</p>
+            <p>Vert - Lumière</p>
+            <p> Bleu - Température eau</p>
+          </div>
+
+          <div class="graph-stats">
+            <p>Moyennes</p>
+            <p>Ph: x</p>
+            <p>Lumière: 900</p>
+            <p>Température eau: 30</p>
+          </div>
+
+        </div>
+
+      </div>
+     
+    </div>
+
+
+
+
+
+
+   
+
+
+
+
+
     <div id="containerGraphSimple">
 
     </div>
