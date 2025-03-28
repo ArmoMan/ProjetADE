@@ -6,6 +6,8 @@ const path = require('path');
 const routesCompte = require('./routes/public/compte');
 const routesMaison = require('./routes/public/information');
 const routesAutre = require('./routes/prive/autre');
+const routesSocket= require('./routes/prive/socketio-post');
+const socketIO = require('./controleur/socketio-controleur')
 
 // Pour recommencer votre base de donnees faire ca: 
 // const baseDonne = require("./config/base-donne");
@@ -29,15 +31,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Mettre en place le boolean si utilisateur connecter/login ou pas
-app.use((req, res, next) => { 
+app.use((req, res, next) => {
     res.locals.estConnecter = req.session.estConnecter || false;
-    next(); 
+    next();
 });
+
+// commencer socketio connexion
+socketIO.commencer(4545);
 
 // mettre en place les routes / directions de navigation
 app.use('/', routesCompte);
 app.use('/',routesMaison);
 app.use('/utilisateur', routesAutre);
+app.use('/capteurs', routesSocket);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
