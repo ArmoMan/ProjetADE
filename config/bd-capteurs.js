@@ -41,6 +41,7 @@ class DBCapteur {
                 SELECT
                     capteur_nom,
                     donnee_nom,
+                    est_actionnable,
                     JSON_ARRAYAGG(donnee_valeur ORDER BY date_creation ASC) AS donne_valeur,
                     JSON_ARRAYAGG(date_creation ORDER BY date_creation ASC) AS date
                 FROM capteur
@@ -57,4 +58,4 @@ class DBCapteur {
     }
 }
  
-module.exports = DBCapteur;
+module.exports = new DBCapteur();
