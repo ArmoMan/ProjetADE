@@ -4,18 +4,6 @@ const barCanvas = document.getElementById("graphiqueSimple");
 const containerGraphSimple = document.getElementById("containerGraphSimple");
 window.onload = recupererDonnees();
 
-
-// const barChart = new Chart(barCanvas, {
-//     type: "bar",
-//     data: {
-//         labels: ["test1", "test2", "test2"],
-//         datasets: [{
-//             data: [240,120,140],
-
-//         }]
-//     }
-// })
-
 function recupererDonnees() {
     fetch("/capteurs/chercher-donnees", {
         method: "POST"
@@ -30,9 +18,14 @@ function recupererDonnees() {
                         const donnee_valeur = donnee.donnee_valeur;
                         const date = donnee.date;
 
-                        // Creer un graphique avec les donnees
-                        creerGraphique("bar", capteur_nom, donnee_nom, donnee_valeur, date)
 
+                        
+                        if (est_actionnable) {
+                            creerToggleSwitch()
+                        }
+
+                        // Creer un graphique avec les donnees
+                        creerGraphique("bar", capteur_nom, donnee_nom, date, donnee_valeur)
 
                     })
                 }
@@ -40,11 +33,6 @@ function recupererDonnees() {
         })
 
 }
-
-// creerGraphique("bar", "Graphique UN", ["test1", "test2", "test3"], [240, 120, 140])
-// creerGraphique("doughnut", "Graphique DEUX", ["test1", "test2", "test3", "test4"], [13, 62, 92, 32])
-// creerGraphique("line", "Graphique TROIS", ["test1", "test2", "test3"], [213, 543, 432])
-
 
 function creerGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
     var canvasGraph = document.createElement("canvas");
@@ -54,7 +42,7 @@ function creerGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY
         data: {
             labels: donneeX,
             datasets: [{
-                label: "exemple de nom de dataset",
+                label: donnee_nom,
                 data: donneeY,
 
             }]
@@ -63,7 +51,7 @@ function creerGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY
             plugins: {
                 title: {
                     display: true,
-                    text: titre,
+                    text: capteur_nom,
                     padding: {
                         top: 10,
                         bottom: 30
@@ -79,4 +67,38 @@ function creerGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY
 
     })
     containerGraphSimple.appendChild(canvasGraph)
+}
+
+function creerToggleSwitch(capteur_nom) {
+    var toggleSwitch = document.createElement("input");
+    toggleSwitch.type = "checkbox";
+    toggleSwitch.className = "toggle-switch";
+    toggleSwitch.id = capteur_nom;
+    toggleSwitch.onchange = activerCapteur(capteur_nom);
+
+    var label = document.createElement("label");
+    label.htmlFor = "toggle-switch";
+    label.className = "switch-label";
+    label.innerText = "Activer le capteur "+capteur_nom;
+
+
+    containerGraphSimple.appendChild(toggleSwitch);
+    containerGraphSimple.appendChild(label);
+}
+
+function activerCapteur(nomCapteur) {
+    fetch("/capteurs/actionner", {
+        method: "POST",
+        body: JSON.stringify({ nomCapteur: nomCapteur }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then((response) => {
+            if (response.fini == true) {
+                console.log("Capteur activé avec succès");
+            } else {
+                console.log("Impossible d'activer le capteur");
+            }
+        })
 }
