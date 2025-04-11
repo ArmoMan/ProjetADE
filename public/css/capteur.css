@@ -103,8 +103,8 @@ body {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    height: 100px;
-    width: 200px;
+    height: fit-content;
+    width: 150px;
 }
 
 .graph-stats p {
