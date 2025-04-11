@@ -18,6 +18,7 @@ router.post('/actionner',utilisateurControleur.authentifier, async (req,res) => 
         const reponse = await client.timeout(5000).emitWithAck('commande', { commande: 'actionner' ,nom_capteur: nomCapteur});
         const jsonReponse = JSON.parse(reponse);
 
+
         return res.json(jsonReponse);
     }catch(e){
         return res.json({fini: false});
@@ -30,15 +31,14 @@ router.post('/actionner',utilisateurControleur.authentifier, async (req,res) => 
 router.post('/chercher-donnees',utilisateurControleur.authentifier, async (req,res) => {
     try{
         const donnees = await dbCapteur.recupererDonnees(req.session.cle_api);
-
+        console.log("dans donnees")
         if(donnees && donnees.error){
-            res.json({success:false, donnees:donnees.error });
+            return res.json({success:false, donnees:donnees.error });
         }
 
         res.json({success:true, donnees: donnees});  
 
     }catch(e){
-        print(e);
         res.json({success:false, donnees: e});
     }
 });
@@ -47,7 +47,7 @@ router.post('/chercher-donnees',utilisateurControleur.authentifier, async (req,r
  * Post request qui retourne les donnees en temps reel des capteurs
  */
 router.post('/chercher-donnees-live',utilisateurControleur.authentifier, async (req,res) => {
-    const donnees = chercherDonnees(req.session.cle_api);
+    const donnees = await chercherDonnees(req.session.cle_api);
     if(donnees != undefined){
         res.json({success:true, donnees: donnees});  
     }else{
@@ -81,6 +81,7 @@ let estCeQueChercherDonnees = false;
  * @returns rien
  */
 async function enregistrerDonneesChaque() {
+    console.log("dans enregistrerDonneesChaque")
     if(estCeQueChercherDonnees) return;
     estCeQueChercherDonnees = true;
 
@@ -88,8 +89,8 @@ async function enregistrerDonneesChaque() {
 
     for (const socket of toutSockets){
         try{
-            const response = await socket.timeout(5000).emitWithAck('commande', { commande: 'envoyer_donnees' });
-            const jsonReponse = JSON.parse(response);
+            const reponse = await socket.timeout(5000).emitWithAck('commande', { commande: 'envoyer_donnees' });
+            const jsonReponse = JSON.parse(reponse);
 
              // ajouter les capteurs dans bd
             const capteurs = jsonReponse.appareil.tous_les_capteurs;
@@ -97,6 +98,7 @@ async function enregistrerDonneesChaque() {
 
             if (Array.isArray(capteurs)) {
                 capteurs.forEach(async (capteur) => {
+                    console.log(capteur.nom_capteur);
                     await dbCapteur.ajouterCapteur(cleAPI,capteur.nom_capteur,capteur.nom_donnee, capteur.donnee_collectee, capteur.est_actionnable );
                 });
             } else {
