@@ -5,7 +5,7 @@ function recupererDonnees() {
     fetch("/capteurs/chercher-donnees", {
         method: "POST"
     })
-    .then((response) => response.json())
+        .then((response) => response.json())
         .then((donnees) => {
             if (donnees.success == true) {
                 if (Array.isArray(donnees.donnees)) {
@@ -18,7 +18,7 @@ function recupererDonnees() {
 
 
                         // Creer un graphique avec les donnees
-                        creerSectionGraphique("bar", capteur_nom, donnee_nom, date, donnee_valeur)
+                        creerSectionGraphique("line", capteur_nom, donnee_nom, date, donnee_valeur)
 
                     })
                 }
@@ -27,30 +27,65 @@ function recupererDonnees() {
 
 }
 
-function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
+function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY) {
     // Container general
-    const {arrierePlan, boiteDuContenu} = creerContainerGraphique();
+    const { arrierePlan, boiteDuContenu } = creerContainerGraphique();
 
-    const {canvasGraph, containerContenu} = creerCanvasEtBoutons(donneeX.length);
+    const { canvasGraph, containerContenu } = creerCanvasEtBoutons(donneesX.length);
 
     boiteDuContenu.appendChild(containerContenu);
 
     // Tableau des statistiques
-    const tableauStats = creerTableauStats(donneeY);
+    const tableauStats = creerTableauStats(donneesY);
     boiteDuContenu.appendChild(tableauStats);
-    
-    const graphique = creerGraphique(canvasGraph, typeGraphique,capteur_nom,donnee_nom,donneeX,donneeY);
+
+    const graphique = creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
 
     containerGraphSimple.appendChild(arrierePlan);
 }
 
-function creerTableauStats(donneesY){
+function creerTableauStats(donneesY) {
+    // Calcul des statistiques
+    const moyenne = calculerMoyenne(donneesY);
+    const mediane = calculerMediane(donneesY);
+    const max = Math.max(...donneesY);
+    const min = Math.min(...donneesY);
+
+
     var tableauStats = document.createElement("div");
     tableauStats.className = "graph-stats";
+
+    // Ajout des statistiques au conteneur
+    tableauStats.innerHTML = `
+        <p>Moyenne: ${moyenne.toFixed(2)}</p>
+        <p>Médiane: ${mediane.toFixed(2)}</p>
+        <p>Max: ${max.toFixed(2)}</p>
+        <p>Min: ${min.toFixed(2)}</p>
+    `;
+
+
     return tableauStats;
 }
 
-function creerContainerGraphique(){
+// Fonction pour calculer la moyenne
+function calculerMoyenne(donneesY) {
+    const somme = donneesY.reduce((acc, val) => acc + val, 0);
+    return somme / donneesY.length;
+}
+
+// Fonction pour calculer la médiane
+function calculerMediane(donneesY) {
+    const donneesTriees = [...donneesY].sort((a, b) => a - b);
+    const milieu = Math.floor(donneesTriees.length / 2);
+
+    if (donneesTriees.length % 2 === 0) {
+        return (donneesTriees[milieu - 1] + donneesTriees[milieu]) / 2;
+    } else {
+        return donneesTriees[milieu];
+    }
+}
+
+function creerContainerGraphique() {
     // Container general
     var arrierePlan = document.createElement("div");
     arrierePlan.className = "graph-section";
@@ -61,15 +96,15 @@ function creerContainerGraphique(){
 
     arrierePlan.appendChild(boiteDuContenu);
 
-    return {arrierePlan,boiteDuContenu}
+    return { arrierePlan, boiteDuContenu }
 }
 
-function creerCanvasEtBoutons(nbDonneesX){
-    // canvas avec les buttons
+function creerCanvasEtBoutons(nbDonneesX) {
+    // canvas avec les boutons
     var containerContenu = document.createElement("div");
     containerContenu.className = "graph-container-1";
 
-    // canvas
+    // Canvas
     var canvasContainer = document.createElement("div");
     canvasContainer.className = "canvas-container";
 
@@ -77,12 +112,12 @@ function creerCanvasEtBoutons(nbDonneesX){
     canvasGraph.id = "graphique";
     canvasGraph.width = nbDonneesX * 50;
     canvasGraph.height = 300;
-    canvasGraph.style.width = nbDonneesX * 50+ "px"; 
-    canvasGraph.style.height = 300+ "px";
+    canvasGraph.style.width = nbDonneesX * 50 + "px";
+    canvasGraph.style.height = 300 + "px";
 
     canvasContainer.appendChild(canvasGraph);
 
-    // Buttons
+    // Boutons
     var containerButtons = document.createElement("div");
     containerButtons.className = "graph-buttons";
 
@@ -100,44 +135,44 @@ function creerCanvasEtBoutons(nbDonneesX){
     containerContenu.appendChild(canvasContainer);
     containerContenu.appendChild(containerButtons);
 
-    return {canvasGraph, containerContenu}
+    return { canvasGraph, containerContenu }
 }
 
 
-function creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY){
- // creation du graophique
- new Chart(canvasGraph, {
-    type: typeGraphique,
-    data: {
-        labels: donneeX,
-        datasets: [{
-            label: donnee_nom,
-            data: donneeY,
+function creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
+    // création du graphique
+    new Chart(canvasGraph, {
+        type: typeGraphique,
+        data: {
+            labels: donneeX,
+            datasets: [{
+                label: donnee_nom,
+                data: donneeY,
 
-        }]
-    },
-    options: {
-        responsive: false,
-        maintainAspectRatio: true,
-        plugins: {
-            title: {
-                display: true,
-                text: capteur_nom,
-                padding: {
-                    top: 10,
-                    bottom: 30
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: capteur_nom,
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        },
-        
-        scales: {
-            y: {
-                beginAtZero: true
-            }
         }
-    }
 
-});
+    });
 }
 
 
@@ -166,7 +201,7 @@ function creerToggleSwitch(capteur_nom) {
     var label = document.createElement("label");
     label.htmlFor = "toggle-switch";
     label.className = "switch-label";
-    label.innerText = "Activer le capteur "+capteur_nom;
+    label.innerText = "Activer le capteur " + capteur_nom;
 
 
     containerGraphSimple.appendChild(toggleSwitch);
