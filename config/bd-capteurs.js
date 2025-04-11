@@ -42,11 +42,11 @@ class DBCapteur {
                     capteur_nom,
                     donnee_nom,
                     est_actionnable,
-                    JSON_ARRAYAGG(donnee_valeur ORDER BY date_creation ASC) AS donne_valeur,
-                    JSON_ARRAYAGG(date_creation ORDER BY date_creation ASC) AS date
+                    JSON_ARRAYAGG(donnee_valeur) AS donnee_valeur,
+                    JSON_ARRAYAGG(date_creation) AS date
                 FROM capteur
                 WHERE cle_api = ?
-                GROUP BY capteur_nom, donnee_nom
+                GROUP BY capteur_nom, donnee_nom, est_actionnable
                 ORDER BY MIN(date_creation) ASC
             `, [cle_api]);
  

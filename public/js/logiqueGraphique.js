@@ -1,31 +1,24 @@
-const { response } = require("express");
-
-const barCanvas = document.getElementById("graphiqueSimple");
 const containerGraphSimple = document.getElementById("containerGraphSimple");
-window.onload = recupererDonnees();
+window.onload = recupererDonnees;
 
 function recupererDonnees() {
     fetch("/capteurs/chercher-donnees", {
         method: "POST"
     })
-        .then((response) => {
-            if (response.success == true) {
-                if (Array.isArray(response.donnees)) {
-                    response.donnees.forEach((donnee) => {
-                        const capteur_nom = donnee.capteur_nom;
-                        const donnee_nom = donnee.donnee_nom;
-                        const est_actionnable = donnee.est_actionnable;
-                        const donnee_valeur = donnee.donnee_valeur;
-                        const date = donnee.date;
+    .then((response) => response.json())
+        .then((donnees) => {
+            if (donnees.success == true) {
+                if (Array.isArray(donnees.donnees)) {
+                    donnees.donnees.forEach((donnees) => {
+                        const capteur_nom = donnees.capteur_nom;
+                        const donnee_nom = donnees.donnee_nom;
+                        const est_actionnable = donnees.est_actionnable;
+                        const donnee_valeur = donnees.donnee_valeur;
+                        const date = donnees.date;
 
-
-                        
-                        if (est_actionnable) {
-                            creerToggleSwitch()
-                        }
 
                         // Creer un graphique avec les donnees
-                        creerGraphique("bar", capteur_nom, donnee_nom, date, donnee_valeur)
+                        creerSectionGraphique("bar", capteur_nom, donnee_nom, date, donnee_valeur)
 
                     })
                 }
@@ -34,41 +27,135 @@ function recupererDonnees() {
 
 }
 
-function creerGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
-    var canvasGraph = document.createElement("canvas");
-    canvasGraph.className = "graphe-lineaire";
-    new Chart(canvasGraph, {
-        type: typeGraphique,
-        data: {
-            labels: donneeX,
-            datasets: [{
-                label: donnee_nom,
-                data: donneeY,
+function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
+    // Container general
+    const {arrierePlan, boiteDuContenu} = creerContainerGraphique();
 
-            }]
-        },
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: capteur_nom,
-                    padding: {
-                        top: 10,
-                        bottom: 30
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+    const {canvasGraph, containerContenu} = creerCanvasEtBoutons(donneeX.length);
 
-    })
-    containerGraphSimple.appendChild(canvasGraph)
+    boiteDuContenu.appendChild(containerContenu);
+
+    // Tableau des statistiques
+    const tableauStats = creerTableauStats(donneeY);
+    boiteDuContenu.appendChild(tableauStats);
+    
+    const graphique = creerGraphique(canvasGraph, typeGraphique,capteur_nom,donnee_nom,donneeX,donneeY);
+
+    containerGraphSimple.appendChild(arrierePlan);
 }
 
+function creerTableauStats(donneesY){
+    var tableauStats = document.createElement("div");
+    tableauStats.className = "graph-stats";
+    return tableauStats;
+}
+
+function creerContainerGraphique(){
+    // Container general
+    var arrierePlan = document.createElement("div");
+    arrierePlan.className = "graph-section";
+
+    // div pour placer au milieux les elements
+    var boiteDuContenu = document.createElement("div");
+    boiteDuContenu.className = "graph-container-all";
+
+    arrierePlan.appendChild(boiteDuContenu);
+
+    return {arrierePlan,boiteDuContenu}
+}
+
+function creerCanvasEtBoutons(nbDonneesX){
+    // canvas avec les buttons
+    var containerContenu = document.createElement("div");
+    containerContenu.className = "graph-container-1";
+
+    // canvas
+    var canvasContainer = document.createElement("div");
+    canvasContainer.className = "canvas-container";
+
+    var canvasGraph = document.createElement("canvas");
+    canvasGraph.id = "graphique";
+    canvasGraph.width = nbDonneesX * 50;
+    canvasGraph.height = 300;
+    canvasGraph.style.width = nbDonneesX * 50+ "px"; 
+    canvasGraph.style.height = 300+ "px";
+
+    canvasContainer.appendChild(canvasGraph);
+
+    // Buttons
+    var containerButtons = document.createElement("div");
+    containerButtons.className = "graph-buttons";
+
+    var btnMediane = document.createElement("button");
+    btnMediane.id = "btnMediane";
+    btnMediane.textContent = "Voir la mediane";
+
+    var btnNormal = document.createElement("button");
+    btnNormal.id = "btnNormal";
+    btnNormal.textContent = "Voir le graphique normal";
+
+    containerButtons.appendChild(btnMediane);
+    containerButtons.appendChild(btnNormal);
+
+    containerContenu.appendChild(canvasContainer);
+    containerContenu.appendChild(containerButtons);
+
+    return {canvasGraph, containerContenu}
+}
+
+
+function creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY){
+ // creation du graophique
+ new Chart(canvasGraph, {
+    type: typeGraphique,
+    data: {
+        labels: donneeX,
+        datasets: [{
+            label: donnee_nom,
+            data: donneeY,
+
+        }]
+    },
+    options: {
+        responsive: false,
+        maintainAspectRatio: true,
+        plugins: {
+            title: {
+                display: true,
+                text: capteur_nom,
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
+            }
+        },
+        
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+
+});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Methodes a effacer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function creerToggleSwitch(capteur_nom) {
     var toggleSwitch = document.createElement("input");
     toggleSwitch.type = "checkbox";

@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/css/graph.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel="stylesheet" href="/css/capteur.css">
+  <link rel="stylesheet" href="/css/button.css">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <style>
@@ -22,7 +23,7 @@
     <h1>Page d'acceuil</h1>
 
 
-    <div class="container">
+    <div id="container">
 
       <div class="capteur">
         <div class="nom-forme">Nom du capteur</div>
@@ -65,10 +66,31 @@
         </div>
 
       </div>
+
     </div>
 
 
+  <div class="graph-section">
 
+      <div class="graph-container-all">
+        <div class="graph-container-1">
+          <canvas id="graphique"></canvas>
+
+          <div class="graph-buttons">
+            <button id="btnMediane">Voir la mediane</button>
+            <button id="btnNormal">Voir le graphique normal</button>
+          </div>
+        </div>
+
+        <div class="graph-stats">
+          <p>Moy: x</p>
+          <p>Max: x</p>
+          <p>Min: x</p>
+        </div>
+
+      </div>
+
+    </div>
 
 
     <div class="graph-section">
@@ -135,7 +157,17 @@
     <!-- <canvas id="graphiqueSimple" class="graphe-lineaire" aria-label="chart" role="img"></canvas> -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <script src="/js/logiqueGraphique.js"></script>
+
+    <!-- Commencer l'affichage des donnees en temps reel -->
+    <script src="/js/donneesLive.js"></script>
+    <script>
+      const donneesLive = new DonneesLive();
+      donneesLive.startRafraichissement();
+    </script>
+
 
 </body>
 

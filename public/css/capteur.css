@@ -1,6 +1,6 @@
 
 
-.container {
+#container {
     display: flex;
     gap: 250px;
     align-items: center;
@@ -56,10 +56,10 @@
     gap: 20px;
 }
 
-.graph-container-1 canvas {
+/* .graph-container-1 canvas {
     border-radius: 40px;
     background-color: white;
-}
+} */
 .graph-container-2 canvas {
     border-radius: 10px;
     height: 300px;
