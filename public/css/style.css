@@ -3,6 +3,8 @@ body {
     background: url('/img/background.jpg') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Kanit', sans-serif;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 .login-signup-container{
     height: 100%;

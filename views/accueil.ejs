@@ -22,152 +22,158 @@
 
     <h1>Page d'acceuil</h1>
 
-
-    <div id="container">
-
-      <div class="capteur">
-        <div class="nom-forme">Nom du capteur</div>
-        <div class="nom-forme">Nom de la donnée</div>
-        <div class="valeur-donne">x</div>
+    <div class="container">
+      <div>
+        <h2>Bienvenue sur le Projet ADE</h2>
+        <p>Cette page vous permet de visualiser les données et consulter les graphiques.</p>
+        <p>Vous pouvez également consulter les données en temps réel.</p>
       </div>
 
-      <div class="capteur">
-        <div class="nom-forme">Nom du capteur</div>
-        <div class="nom-forme">Nom de la donnée</div>
-        <div class="valeur-donne">x</div>
+      <div class="container-capteur">
 
-      </div>
-      <div class="capteur">
-        <div class="nom-forme">Nom du capteur</div>
-        <div class="nom-forme">Nom de la donnée</div>
-        <div class="valeur-donne">x</div>
-      </div>
-
-    </div>
-
-
-
-    <div class="graph-section">
-
-      <div class="graph-container-all">
-        <div class="graph-container-1">
-          <canvas id="graphique"></canvas>
-
-          <div class="graph-buttons">
-            <button id="btnMediane">Voir la mediane</button>
-            <button id="btnNormal">Voir le graphique normal</button>
-          </div>
+        <div class="capteur">
+          <div class="nom-forme">Nom du capteur</div>
+          <div class="nom-forme">Nom de la donnée</div>
+          <div class="valeur-donne">x</div>
         </div>
 
-        <div class="graph-stats">
-          <p>Moy: x</p>
-          <p>Max: x</p>
-          <p>Min: x</p>
+        <div class="capteur">
+          <div class="nom-forme">Nom du capteur</div>
+          <div class="nom-forme">Nom de la donnée</div>
+          <div class="valeur-donne">x</div>
+
+        </div>
+        <div class="capteur">
+          <div class="nom-forme">Nom du capteur</div>
+          <div class="nom-forme">Nom de la donnée</div>
+          <div class="valeur-donne">x</div>
         </div>
 
       </div>
 
-    </div>
 
 
-  <div class="graph-section">
+      <div class="graph-section">
 
-      <div class="graph-container-all">
-        <div class="graph-container-1">
-          <canvas id="graphique"></canvas>
+        <div class="graph-container-all">
+          <div class="graph-container-1">
+            <canvas id="graphique"></canvas>
 
-          <div class="graph-buttons">
-            <button id="btnMediane">Voir la mediane</button>
-            <button id="btnNormal">Voir le graphique normal</button>
-          </div>
-        </div>
-
-        <div class="graph-stats">
-          <p>Moy: x</p>
-          <p>Max: x</p>
-          <p>Min: x</p>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="graph-section">
-
-
-      <div class="data-selection">
-        <label>Quelles données voir</label>
-        <input type="checkbox" id="ph" name="ph">
-        <label for="ph">PH</label>
-        <input type="checkbox" id="temperature" name="temperature">
-        <label for="temperature">Température eau</label>
-
-      </div>
-
-      <div class="graph-container-all">
-
-
-        <div class="graph-container-2">
-          <canvas id="graphique"></canvas>
-
-          <div class="graph-buttons">
-            <button>Voir jour</button>
-            <button>Voir nuit</button>
-            <button>Voir 24h</button>
-          </div>
-        </div>
-
-        <div class="stats-container">
-
-          <div class="graph-stats">
-            <p>Légende</p>
-            <p>Rouge - PH</p>
-            <p>Vert - Lumière</p>
-            <p> Bleu - Température eau</p>
+            <div class="graph-buttons">
+              <button id="btnMediane">Voir la mediane</button>
+              <button id="btnNormal">Voir le graphique normal</button>
+            </div>
           </div>
 
           <div class="graph-stats">
-            <p>Moyennes</p>
-            <p>Ph: x</p>
-            <p>Lumière: 900</p>
-            <p>Température eau: 30</p>
+            <p>Moy: x</p>
+            <p>Max: x</p>
+            <p>Min: x</p>
           </div>
 
         </div>
 
       </div>
-     
+
+
+      <div class="graph-section">
+
+        <div class="graph-container-all">
+          <div class="graph-container-1">
+            <canvas id="graphique"></canvas>
+
+            <div class="graph-buttons">
+              <button id="btnMediane">Voir la mediane</button>
+              <button id="btnNormal">Voir le graphique normal</button>
+            </div>
+          </div>
+
+          <div class="graph-stats">
+            <p>Moy: x</p>
+            <p>Max: x</p>
+            <p>Min: x</p>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="graph-section">
+        <div class="data-selection">
+          <label>Quelles données voir</label>
+          <input type="checkbox" id="ph" name="ph">
+          <label for="ph">PH</label>
+          <input type="checkbox" id="temperature" name="temperature">
+          <label for="temperature">Température eau</label>
+        </div>
+
+
+        <div class="graph-container-all">
+          <div class="graph-container-2">
+            <canvas id="graphique"></canvas>
+
+            <div class="graph-buttons">
+              <button>Voir jour</button>
+              <button>Voir nuit</button>
+              <button>Voir 24h</button>
+            </div>
+          </div>
+
+          <div class="stats-container">
+
+            <div class="graph-stats">
+              <p>Légende</p>
+              <p>Rouge - PH</p>
+              <p>Vert - Lumière</p>
+              <p> Bleu - Température eau</p>
+            </div>
+
+            <div class="graph-stats">
+              <p>Moyennes</p>
+              <p>Ph: x</p>
+              <p>Lumière: 900</p>
+              <p>Température eau: 30</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div id="containerGraphSimple">
+
+      </div>
+      <!-- <canvas id="graphiqueSimple" class="graphe-lineaire" aria-label="chart" role="img"></canvas> -->
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+      <script src="/js/logiqueGraphique.js"></script>
+
+      <!-- Commencer l'affichage des donnees en temps reel -->
+      <script src="/js/donneesLive.js"></script>
+      <script>
+        const donneesLive = new DonneesLive();
+        donneesLive.startRafraichissement();
+      </script>
+
+
     </div>
-
-
-
-
-
-
-   
-
-
-
-
-
-    <div id="containerGraphSimple">
-
-    </div>
-    <!-- <canvas id="graphiqueSimple" class="graphe-lineaire" aria-label="chart" role="img"></canvas> -->
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-    <script src="/js/logiqueGraphique.js"></script>
-
-    <!-- Commencer l'affichage des donnees en temps reel -->
-    <script src="/js/donneesLive.js"></script>
-    <script>
-      const donneesLive = new DonneesLive();
-      donneesLive.startRafraichissement();
-    </script>
-
 
 </body>
 
