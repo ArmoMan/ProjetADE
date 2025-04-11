@@ -39,7 +39,7 @@ function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX,
     const tableauStats = creerTableauStats(donneesY);
     boiteDuContenu.appendChild(tableauStats);
 
-    const graphique = creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
+    const graphique = creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
 
     containerGraphSimple.appendChild(arrierePlan);
 }
@@ -61,7 +61,7 @@ function creerTableauStats(donneesY) {
         <p>Médiane: ${mediane.toFixed(2)}</p>
         <p>Max: ${max.toFixed(2)}</p>
         <p>Min: ${min.toFixed(2)}</p>
-    `;
+        `;
 
 
     return tableauStats;
@@ -139,7 +139,7 @@ function creerCanvasEtBoutons(nbDonneesX) {
 }
 
 
-function creerGraphique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
+function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
     // création du graphique
     new Chart(canvasGraph, {
         type: typeGraphique,

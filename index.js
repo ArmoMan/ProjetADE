@@ -48,3 +48,9 @@ app.use('/capteurs', routesSocket);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 });
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/'); // Redirige vers la page d'accueil après déconnexion
+    });
+});
