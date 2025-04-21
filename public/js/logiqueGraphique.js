@@ -1,5 +1,3 @@
-const { Chart } = require("chart.js");
-
 const containerGraphSimple = document.getElementById("containerGraphSimple");
 window.onload = recupererDonnees;
 
@@ -92,7 +90,7 @@ function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX,
 
     // canvas avec les boutons
     var containerContenu = document.createElement("div");
-    containerContenu.className = "graph-container-1";
+    containerContenu.className = "graph-container-button-canvas";
 
     // Canvas et chartjs
     var {canvasContainer,canvasGraph} = creerCanvas(donneesX.length);
@@ -210,12 +208,14 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
 
     // Boutons
     var containerButtons = document.createElement("div");
-    containerButtons.className = "graph-buttons";
+    containerButtons.className = "graph-buttons-container";
 
     // mediane
     var btnMediane = document.createElement("button");
     btnMediane.id = "btnMediane";
     btnMediane.textContent = "Voir la mediane";
+    btnMediane.classList.add("graph-button-bas");
+
     const medianeCalculee = calculerMediane(donneesY)
     btnMediane.addEventListener('click', () => {
         ajouterLigneChartjs('mediane','red', medianeCalculee,medianeCalculee,chartJSGraph);
@@ -225,7 +225,8 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
     var btnMoyenne = document.createElement("button");
     btnMoyenne.id = "btnMoyenne";
     btnMoyenne.textContent = "Voir la moyenne";
-    
+    btnMoyenne.classList.add("graph-button-bas");
+
     const moyenneCalculee = calculerMoyenne(donneesY)
     btnMoyenne.addEventListener('click', () => {
         ajouterLigneChartjs('moyenne', 'black',moyenneCalculee,moyenneCalculee,chartJSGraph);
@@ -237,6 +238,7 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
     // Ajouter les bouttons de conversion
     const tableauButtonsConversion = creerButtonsConversionUnite(nomDonneesY, donneesY, chartJSGraph);
     tableauButtonsConversion.forEach((button) => {
+        button.classList.add("graph-button-bas");
         containerButtons.appendChild(button);
     });
 

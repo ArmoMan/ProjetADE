@@ -14,7 +14,7 @@ class DonneesLive {
 
       if (data.success && data.donnees) {
         // On doit supprimer les anciennes boites avant de recréer les nouvelles
-        document.getElementById("container").innerHTML = "";
+        document.getElementById("containerCapteur").innerHTML = "";
 
         // On crée une boîte pour chaque capteur
         data.donnees.appareil.tous_les_capteurs.forEach((capteur) => {
@@ -44,7 +44,7 @@ class DonneesLive {
           }
 
           // On ajoute la boîte à la section des capteurs
-          document.getElementById("container").appendChild(capteurDiv);
+          document.getElementById("containerCapteur").appendChild(capteurDiv);
         });
       } else {
         console.error("Erreur dans les données reçues.");
