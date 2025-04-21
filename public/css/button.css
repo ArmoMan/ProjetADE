@@ -21,3 +21,15 @@
     border: 1px solid grey;
 }
 
+.graph-button-bas{
+    background-color: #b2dfdb;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.graph-button-bas:hover{
+    background-color: #368a83;
+}

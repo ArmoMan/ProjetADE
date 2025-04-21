@@ -28,3 +28,78 @@
 .titre-graphs{
     text-align: center;
 }
+
+
+
+
+
+.graph-section {
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    background-color: #4db6ac;
+    padding: 20px;
+    border-radius: 10px;
+    gap: 100px;
+    justify-self: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.graph-container-all {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.graph-container-button-canvas {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
+
+.graph-buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.graph-stats {
+    background-color: #b2dfdb;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    height: fit-content;
+    width: 150px;
+}
+
+.graph-stats p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+
+
+
+
+/* A effacer : */
+
+
+  .graph-container-2 canvas {
+    border-radius: 10px;
+    height: 300px;
+    width: 350px;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
