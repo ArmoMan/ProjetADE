@@ -34,7 +34,7 @@ class DonneesLive {
           const valeurDonneeDiv = document.createElement("div");
           valeurDonneeDiv.classList.add("valeur-donne");
           valeurDonneeDiv.style.textAlign = "center";
-          valeurDonneeDiv.textContent = capteur.donnee_collectee;
+          valeurDonneeDiv.textContent = capteur.donnee_collectee.toFixed(2);
           capteurDiv.appendChild(valeurDonneeDiv);
 
           // Si le capteur est actionnable, ajouter un button actioner
