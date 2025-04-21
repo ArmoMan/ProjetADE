@@ -16,9 +16,11 @@ function recupererDonnees() {
                         const donnee_valeur = donnees.donnee_valeur;
                         const date = donnees.date;
 
+                        // Trier les donnees et dates
+                        const {datesEnOrdre, donneesEnOrdre} = mettreOrdreCroissant(date, donnee_valeur);
 
                         // Creer un graphique avec les donnees
-                        creerSectionGraphique("line", capteur_nom, donnee_nom, date, donnee_valeur)
+                        creerSectionGraphique("line", capteur_nom, donnee_nom, datesEnOrdre, donneesEnOrdre)
 
                     })
                 }
@@ -27,19 +29,83 @@ function recupererDonnees() {
 
 }
 
+/**
+ * Méthode pour prendre deux tableaux, les combiner en une structure intermédiaire,
+ * les trier en ordre croissant selon les dates, puis retourner deux tableaux triés.
+ *
+ * @param {*} datesDesordre est le tableau des dates en désordre.
+ * @param {*} donneesDesordre c'est le tableau des données du capteur en désordre.
+ * @returns un tableau contenant d'abord les dates triées, puis les données correspondantes triées.
+ */
+function mettreOrdreCroissant(datesDesordre, donneesDesordre){
+    // Creer une map 
+    const mapRecu = creerUneMap(datesDesordre, donneesDesordre);
+
+    // mettre le map en ordre croissant de date
+    mapRecu.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+    // Separer en array
+    const datesEnOrdre = [];
+    const donneesEnOrdre = [];
+    for(let i = 0; i< mapRecu.length; i++){
+        datesEnOrdre.push(mapRecu[i].date);
+        donneesEnOrdre.push(mapRecu[i].donnee);
+    }
+
+    return { datesEnOrdre, donneesEnOrdre }
+}
+
+/**
+ * Méthode pour transformer deux tableaux, dans ce cas les dates et les données, en un seul tableau combiné.
+ * @param {*} datesDesordre - Le tableau des dates en désordre.
+ * @param {*} donneesDesordre - Le tableau des données en désordre.
+ * @returns Un tableau combiné associant chaque date à sa donnée correspondante.
+ */
+function creerUneMap(datesDesordre, donneesDesordre){
+    const mapDateDonnees = []
+
+   // Si pas la meme taille, alors retrouner vide
+   if(datesDesordre.length != datesDesordre.length) return mapDateDonnees;
+
+   // Creer une map des deux
+   for(let i = 0; i < datesDesordre.length; i++ )  {
+       mapDateDonnees.push({
+           date: datesDesordre[i],
+           donnee: donneesDesordre[i]
+       });
+   }
+
+   return mapDateDonnees;
+}
+
 function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY) {
     // Container general
     const { arrierePlan, boiteDuContenu } = creerContainerGraphique();
 
-    const { canvasGraph, containerContenu } = creerCanvasEtBoutons(donneesX.length);
+    //titre du capteur
+    var texteTitre = document.createElement("h2");
+    texteTitre.textContent = capteur_nom;
+    texteTitre.className = "titre-graphs";
+    arrierePlan.insertBefore(texteTitre, boiteDuContenu);
 
+    // canvas avec les boutons
+    var containerContenu = document.createElement("div");
+    containerContenu.className = "graph-container-1";
+
+    // Canvas et chartjs
+    var {canvasContainer,canvasGraph} = creerCanvas(donneesX.length);
+    const graphique = creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
+
+    // buttons
+    var containerButtons = creerButtons(graphique, donneesY);
+
+    containerContenu.appendChild(canvasContainer);
+    containerContenu.appendChild(containerButtons);
     boiteDuContenu.appendChild(containerContenu);
 
     // Tableau des statistiques
     const tableauStats = creerTableauStats(donneesY);
     boiteDuContenu.appendChild(tableauStats);
-
-    const graphique = creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
 
     containerGraphSimple.appendChild(arrierePlan);
 }
@@ -85,6 +151,12 @@ function calculerMediane(donneesY) {
     }
 }
 
+
+/**
+ * Crée la structure de base HTML pour accueillir un graphique Chart.js.
+ *
+ * @returns un fond (arrierePlan) et un conteneur centré (boiteDuContenu)
+ */
 function creerContainerGraphique() {
     // Container general
     var arrierePlan = document.createElement("div");
@@ -99,11 +171,15 @@ function creerContainerGraphique() {
     return { arrierePlan, boiteDuContenu }
 }
 
-function creerCanvasEtBoutons(nbDonneesX) {
-    // canvas avec les boutons
-    var containerContenu = document.createElement("div");
-    containerContenu.className = "graph-container-1";
 
+/**
+ * Crée dynamiquement un élément <canvas> pour afficher un graphique Chart.js,
+ * avec une largeur adaptative selon le nombre de données x.
+ *
+ * @param {*} nbDonneesX  c'est le nombre de points sur l'axe X 
+ * @returns un conteneur div du canvas (canvasContainer) et le canvas (canvasGraph)
+ */
+function creerCanvas(nbDonneesX){
     // Canvas
     var canvasContainer = document.createElement("div");
     canvasContainer.className = "canvas-container";
@@ -117,31 +193,87 @@ function creerCanvasEtBoutons(nbDonneesX) {
 
     canvasContainer.appendChild(canvasGraph);
 
+    return {canvasContainer, canvasGraph};
+}
+
+
+/**
+ * Crée les boutons d'interaction pour ajouter/supprimer des données sur un graphique Chart.js.
+ *
+ * @param {*} chartJSGraph c'est le graphique Chart.js auquel les annotations seront ajoutées.
+ * @param {*} donneesY c'est les données numériques à partir desquelles les calculs seront effectués.
+ * @returns le conteneur div contenant les boutons (containerButtons).
+ */
+function creerButtons(chartJSGraph, donneesY){
+
     // Boutons
     var containerButtons = document.createElement("div");
     containerButtons.className = "graph-buttons";
 
+    // mediane
     var btnMediane = document.createElement("button");
     btnMediane.id = "btnMediane";
     btnMediane.textContent = "Voir la mediane";
+    const medianeCalculee = calculerMediane(donneesY)
+    btnMediane.addEventListener('click', () => {
+        ajouterLigneChartjs('mediane','red', medianeCalculee,medianeCalculee,chartJSGraph);
+    })
 
-    var btnNormal = document.createElement("button");
-    btnNormal.id = "btnNormal";
-    btnNormal.textContent = "Voir le graphique normal";
+    // moyenne
+    var btnMoyenne = document.createElement("button");
+    btnMoyenne.id = "btnMoyenne";
+    btnMoyenne.textContent = "Voir la moyenne";
+    
+    const moyenneCalculee = calculerMoyenne(donneesY)
+    btnMoyenne.addEventListener('click', () => {
+        ajouterLigneChartjs('moyenne', 'black',moyenneCalculee,moyenneCalculee,chartJSGraph);
+    })
 
     containerButtons.appendChild(btnMediane);
-    containerButtons.appendChild(btnNormal);
+    containerButtons.appendChild(btnMoyenne);
 
-    containerContenu.appendChild(canvasContainer);
-    containerContenu.appendChild(containerButtons);
+    return containerButtons;
+}
 
-    return { canvasGraph, containerContenu }
+
+/**
+ * Ajoute ou retire dynamiquement une ligne horizontale d'annotation sur un graphique Chart.js.
+ * 
+ *  Si la ligne est déjà présente, elle sera supprimée. Sinon, elle sera ajoutée.
+ *
+ * @param {string} nomAnnotation c'est le nom unique de l'annotation à ajouter ou supprimer (clé dans annotations)
+ * @param {string} couleur de la ligne d'annotation ex: black
+ * @param {number} valeurAffichee c'est la valeur sur l'axe Y où tracer la ligne 
+ * @param {string} titre est le texte affiché sur la ligne 
+ * @param {Chart} chartJSGraph est le graphique Chart.js sur lequel ajouter ou retirer l'annotation
+ */
+function ajouterLigneChartjs(nomAnnotation, couleur, valeurAffichee, titre, chartJSGraph){
+
+    // Si la ligne est déjà présente, elle sera supprimée. Sinon, elle sera ajoutée.
+    if(chartJSGraph.options.plugins.annotation.annotations[nomAnnotation]){
+        delete chartJSGraph.options.plugins.annotation.annotations[nomAnnotation];
+    }else{
+        chartJSGraph.options.plugins.annotation.annotations[nomAnnotation] = {
+            type: 'line',
+            borderColor:couleur,
+            borderDash: [2,2],
+            label:{
+                enabled: true,
+                content:  titre,
+                position:'center'
+            },
+            scaleID: 'y',
+            value: valeurAffichee
+        }
+    }
+
+    chartJSGraph.update();
 }
 
 
 function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
     // création du graphique
-    new Chart(canvasGraph, {
+    return new Chart(canvasGraph, {
         type: typeGraphique,
         data: {
             labels: donneeX,
@@ -162,6 +294,9 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
                         top: 10,
                         bottom: 30
                     }
+                },
+                annotation: {
+                    annotations:{}
                 }
             },
 
@@ -173,54 +308,4 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
         }
 
     });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Methodes a effacer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-function creerToggleSwitch(capteur_nom) {
-    var toggleSwitch = document.createElement("input");
-    toggleSwitch.type = "checkbox";
-    toggleSwitch.className = "toggle-switch";
-    toggleSwitch.id = capteur_nom;
-    toggleSwitch.onchange = activerCapteur(capteur_nom);
-
-    var label = document.createElement("label");
-    label.htmlFor = "toggle-switch";
-    label.className = "switch-label";
-    label.innerText = "Activer le capteur " + capteur_nom;
-
-
-    containerGraphSimple.appendChild(toggleSwitch);
-    containerGraphSimple.appendChild(label);
-}
-
-function activerCapteur(nomCapteur) {
-    fetch("/capteurs/actionner", {
-        method: "POST",
-        body: JSON.stringify({ nomCapteur: nomCapteur }),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then((response) => {
-            if (response.fini == true) {
-                console.log("Capteur activé avec succès");
-            } else {
-                console.log("Impossible d'activer le capteur");
-            }
-        })
 }

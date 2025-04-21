@@ -97,10 +97,10 @@ async function enregistrerDonneesChaque() {
             const cleAPI = jsonReponse.appareil.cle_api;
 
             if (Array.isArray(capteurs)) {
-                capteurs.forEach(async (capteur) => {
+                for (const capteur of capteurs){
                     console.log(capteur.nom_capteur);
                     await dbCapteur.ajouterCapteur(cleAPI,capteur.nom_capteur,capteur.nom_donnee, capteur.donnee_collectee, capteur.est_actionnable );
-                });
+                };
             } else {
               console.log("Pas de capteurs actifs.");
             }
