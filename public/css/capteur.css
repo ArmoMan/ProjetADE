@@ -1,12 +1,26 @@
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 
-
-#container {
+.container {
     display: flex;
-    gap: 250px;
+    flex-direction: column;
+    gap: 50px;
     align-items: center;
     justify-content: center;
     margin: 40px;
+    
+}
+.container-capteur {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
+    width: 100%;
 }
 .capteur {
     background-color: #4db6ac;
@@ -89,8 +103,8 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    height: 100px;
-    width: 200px;
+    height: fit-content;
+    width: 150px;
 }
 
 .graph-stats p {

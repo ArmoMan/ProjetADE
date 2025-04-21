@@ -5,7 +5,7 @@ function recupererDonnees() {
     fetch("/capteurs/chercher-donnees", {
         method: "POST"
     })
-    .then((response) => response.json())
+        .then((response) => response.json())
         .then((donnees) => {
             if (donnees.success == true) {
                 if (Array.isArray(donnees.donnees)) {
@@ -80,7 +80,7 @@ function creerUneMap(datesDesordre, donneesDesordre){
 
 function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY) {
     // Container general
-    const {arrierePlan, boiteDuContenu} = creerContainerGraphique();
+    const { arrierePlan, boiteDuContenu } = creerContainerGraphique();
 
     //titre du capteur
     var texteTitre = document.createElement("h2");
@@ -104,15 +104,32 @@ function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX,
     boiteDuContenu.appendChild(containerContenu);
 
     // Tableau des statistiques
-    const tableauStats = creerTableauStats(donneeY);
+    const tableauStats = creerTableauStats(donneesY);
     boiteDuContenu.appendChild(tableauStats);
 
     containerGraphSimple.appendChild(arrierePlan);
 }
 
-function creerTableauStats(donneesY){
+function creerTableauStats(donneesY) {
+    // Calcul des statistiques
+    const moyenne = calculerMoyenne(donneesY);
+    const mediane = calculerMediane(donneesY);
+    const max = Math.max(...donneesY);
+    const min = Math.min(...donneesY);
+
+
     var tableauStats = document.createElement("div");
     tableauStats.className = "graph-stats";
+
+    // Ajout des statistiques au conteneur
+    tableauStats.innerHTML = `
+        <p>Moyenne: ${moyenne.toFixed(2)}</p>
+        <p>Médiane: ${mediane.toFixed(2)}</p>
+        <p>Max: ${max.toFixed(2)}</p>
+        <p>Min: ${min.toFixed(2)}</p>
+        `;
+
+
     return tableauStats;
 }
 
@@ -151,7 +168,7 @@ function creerContainerGraphique() {
 
     arrierePlan.appendChild(boiteDuContenu);
 
-    return {arrierePlan,boiteDuContenu}
+    return { arrierePlan, boiteDuContenu }
 }
 
 
@@ -171,8 +188,8 @@ function creerCanvas(nbDonneesX){
     canvasGraph.id = "graphique";
     canvasGraph.width = nbDonneesX * 50;
     canvasGraph.height = 300;
-    canvasGraph.style.width = nbDonneesX * 50+ "px"; 
-    canvasGraph.style.height = 300+ "px";
+    canvasGraph.style.width = nbDonneesX * 50 + "px";
+    canvasGraph.style.height = 300 + "px";
 
     canvasContainer.appendChild(canvasGraph);
 
@@ -290,5 +307,5 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
             }
         }
 
-});
+    });
 }
