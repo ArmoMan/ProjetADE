@@ -54,4 +54,11 @@ router.post('/login', async (req, res)=> {
     }
 });
 
+
+router.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/'); // Redirige vers la page d'accueil après déconnexion
+    });
+});
+
 module.exports = router;
