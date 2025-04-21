@@ -1,3 +1,5 @@
+const { Chart } = require("chart.js");
+
 const containerGraphSimple = document.getElementById("containerGraphSimple");
 window.onload = recupererDonnees;
 
@@ -20,7 +22,7 @@ function recupererDonnees() {
                         const {datesEnOrdre, donneesEnOrdre} = mettreOrdreCroissant(date, donnee_valeur);
 
                         // Creer un graphique avec les donnees
-                        creerSectionGraphique("line", capteur_nom, donnee_nom, datesEnOrdre, donneesEnOrdre)
+                        creerSectionGraphique("line", capteur_nom, donnee_nom, datesEnOrdre, donneesEnOrdre);
 
                     })
                 }
@@ -33,8 +35,8 @@ function recupererDonnees() {
  * Méthode pour prendre deux tableaux, les combiner en une structure intermédiaire,
  * les trier en ordre croissant selon les dates, puis retourner deux tableaux triés.
  *
- * @param {*} datesDesordre est le tableau des dates en désordre.
- * @param {*} donneesDesordre c'est le tableau des données du capteur en désordre.
+ * @param {number[]} datesDesordre est le tableau des dates en désordre.
+ * @param {number[]} donneesDesordre c'est le tableau des données du capteur en désordre.
  * @returns un tableau contenant d'abord les dates triées, puis les données correspondantes triées.
  */
 function mettreOrdreCroissant(datesDesordre, donneesDesordre){
@@ -57,8 +59,8 @@ function mettreOrdreCroissant(datesDesordre, donneesDesordre){
 
 /**
  * Méthode pour transformer deux tableaux, dans ce cas les dates et les données, en un seul tableau combiné.
- * @param {*} datesDesordre - Le tableau des dates en désordre.
- * @param {*} donneesDesordre - Le tableau des données en désordre.
+ * @param {number[]} datesDesordre - Le tableau des dates en désordre.
+ * @param {number[]} donneesDesordre - Le tableau des données en désordre.
  * @returns Un tableau combiné associant chaque date à sa donnée correspondante.
  */
 function creerUneMap(datesDesordre, donneesDesordre){
@@ -97,7 +99,7 @@ function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX,
     const graphique = creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
 
     // buttons
-    var containerButtons = creerButtons(graphique, donneesY);
+    var containerButtons = creerButtons(graphique, donneesY, donnee_nom);
 
     containerContenu.appendChild(canvasContainer);
     containerContenu.appendChild(containerButtons);
@@ -176,7 +178,7 @@ function creerContainerGraphique() {
  * Crée dynamiquement un élément <canvas> pour afficher un graphique Chart.js,
  * avec une largeur adaptative selon le nombre de données x.
  *
- * @param {*} nbDonneesX  c'est le nombre de points sur l'axe X 
+ * @param {number} nbDonneesX  c'est le nombre de points sur l'axe X 
  * @returns un conteneur div du canvas (canvasContainer) et le canvas (canvasGraph)
  */
 function creerCanvas(nbDonneesX){
@@ -200,11 +202,11 @@ function creerCanvas(nbDonneesX){
 /**
  * Crée les boutons d'interaction pour ajouter/supprimer des données sur un graphique Chart.js.
  *
- * @param {*} chartJSGraph c'est le graphique Chart.js auquel les annotations seront ajoutées.
- * @param {*} donneesY c'est les données numériques à partir desquelles les calculs seront effectués.
+ * @param {Chart} chartJSGraph c'est le graphique Chart.js auquel les annotations seront ajoutées.
+ * @param {number[]} donneesY c'est les données numériques à partir desquelles les calculs seront effectués.
  * @returns le conteneur div contenant les boutons (containerButtons).
  */
-function creerButtons(chartJSGraph, donneesY){
+function creerButtons(chartJSGraph, donneesY,nomDonneesY){
 
     // Boutons
     var containerButtons = document.createElement("div");
@@ -231,6 +233,12 @@ function creerButtons(chartJSGraph, donneesY){
 
     containerButtons.appendChild(btnMediane);
     containerButtons.appendChild(btnMoyenne);
+
+    // Ajouter les bouttons de conversion
+    const tableauButtonsConversion = creerButtonsConversionUnite(nomDonneesY, donneesY, chartJSGraph);
+    tableauButtonsConversion.forEach((button) => {
+        containerButtons.appendChild(button);
+    });
 
     return containerButtons;
 }
@@ -270,6 +278,72 @@ function ajouterLigneChartjs(nomAnnotation, couleur, valeurAffichee, titre, char
     chartJSGraph.update();
 }
 
+/**
+ * Méthode pour changer les données y d'un graphique Chart.js
+ * @param {Chart} graphChartJS est le graphique Chart.js à modifier
+ * @param {string} label est le nom de la série de données
+ * @param {number[]} data est la liste des nouvelles valeurs en y
+ */
+function changerYDonneesGraphique(chartJSGraph, label, data){
+
+    // changer de datasheet
+    if (chartJSGraph.data.datasets.length > 0) {
+        chartJSGraph.data.datasets[0].label = label;
+        chartJSGraph.data.datasets[0].data = data;
+    }
+
+    chartJSGraph.update()
+}
+
+/**
+ * Méthode pour détecter les données à convertir selon le titre de l'axe Y et créer un bouton de conversion avec sa logique
+ * @param {string} nomDonneesY Le nom des données de l'axe Y
+ * @param {number[]} donneesY Le tableau des données en Y
+ * @param {Chart} chartJSGraph Le graphique Chart.js
+ * @returns Un tableau de boutons de conversion
+ */
+function creerButtonsConversionUnite(nomDonneesY, donneesY, chartJSGraph){
+    var tableauButtons = [];
+
+
+    switch (nomDonneesY) {
+        case "Temperature (C)":
+            var btnKevin = document.createElement("button");
+            btnKevin.id = "btnKevin";
+            btnKevin.textContent = "Voir en K";
+            btnKevin.addEventListener('click', () => {
+                const voirEnC = btnKevin.textContent === "Voir en C";
+    
+                btnKevin.textContent = voirEnC ? "Voir en K" : "Voir en C";
+    
+                // Choisir les bonnes données à afficher
+                const donneesAfficher = voirEnC ? donneesY : convertirCenK(donneesY);
+                const nomDonneesAfficher = voirEnC ? nomDonneesY : "Temperature (K)";
+
+                changerYDonneesGraphique(chartJSGraph, nomDonneesAfficher, donneesAfficher);
+            });
+
+            tableauButtons.push(btnKevin);
+            break;
+        default:
+    }
+
+    return tableauButtons;
+}
+
+/**
+ * Méthode pour convertir un tableau de données de C vers K
+ * @param {number[]} tableauDonnees Le tableau de données à convertir en Kelvin
+ * @returns Un tableau de nombres convertis en Kelvin
+ */
+function convertirCenK(tableauDonnnees){
+    nouveauTableau = [];
+    tableauDonnnees.forEach((valeurActuel)=> {
+        nouveauTableau.push(valeurActuel + 273.15);
+    });
+
+    return nouveauTableau;
+}
 
 function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
     // création du graphique
@@ -280,7 +354,6 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
             datasets: [{
                 label: donnee_nom,
                 data: donneeY,
-
             }]
         },
         options: {
