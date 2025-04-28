@@ -12,6 +12,9 @@ class BaseDonne{
         });
     }
 
+    /**
+     * Methode pour effacer les tables capteur et utilisateur pour ensuite les recreer
+     */
     async recommencerTables(){
         try{
             await this.poolConnexion.query("DROP TABLE IF EXISTS capteur;");

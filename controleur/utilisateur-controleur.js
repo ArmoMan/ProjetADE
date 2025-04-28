@@ -4,7 +4,15 @@ const { generateApiKey } = require('generate-api-key');
 
 class UtilisateurControleur {
 
-    // Vérifier que l'utilisateur existe dans la session et dans la base de données
+    
+      /**
+     * Vérifier que l'utilisateur existe dans la session et dans la base de données
+     * 
+     * @param {*} req requête express.
+     * @param {*} res réponse express.
+     * @param {*} next fonction suivante de express.
+     * @returns vers /signup si le compte n'existe pas et fait fonction suivant si ca existe
+     */
     async authentifier(req, res, next) {
         try{
             if (!req.session.email || !req.session.cle_api) {
@@ -27,7 +35,13 @@ class UtilisateurControleur {
     }
 
 
-    // methode pour creer un compte
+    /**
+     * Methode pour creer un compte
+     * 
+     * @param {string} email est l'adresse email de l'utilisateur.
+     * @param {string} pass est le mot de passe de l'utilisateur.
+     * @returns  { estReussi: boolean, message: string , cle_api: string};
+     */
     async creerCompte(email, pass) {
         const CLE_API = await this.genererAPI(); 
         try {
@@ -47,7 +61,11 @@ class UtilisateurControleur {
         }
     }
 
-    // Generer une cle api unique
+    
+    /**
+     * Methode pour generer une cle api unique
+     * @returns {string} la cle api
+     */
     async genererAPI(){
         let cle_api_temp = generateApiKey({ method: 'bytes', min: 17, max: 40 });
         let estCleExsitant = await utilisateur.estCleAPIExister(cle_api_temp)
@@ -58,7 +76,13 @@ class UtilisateurControleur {
         return cle_api_temp;
     }
 
-    // methode pour login
+    /**
+     * Methode pour le login
+     * @param {string} email est l'adresse email de l'utilisateur.
+     * @param {string} pass est le mot de passe de l'utilisateur.
+     * @returns en cas d'echec: { estReussi: boolean, message:string } et en cas de reussite: { estReussi: boolean, cle_api: string }
+     */
+
     async entrerCompte(email, pass) {
         try {
             // Vérifier que le compte n'existe pas
