@@ -50,9 +50,11 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .graph-container-button-canvas {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -65,9 +67,12 @@
 .graph-buttons-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
+    justify-content: center;
 }
 
+/* Pour la boite de statistique */
 .graph-stats {
     background-color: #b2dfdb;
     padding: 20px;
@@ -103,3 +108,15 @@
     gap: 20px;
 }
 
+/***************** Mobile ***************/
+@media only screen and (max-width: 600px) {
+    .graph-section {
+        width: 80%;
+    }
+    .graph-container-button-canvas{
+        width: 80%;
+    }
+    .canvas-container { 
+        width: 100%;
+    }
+  }

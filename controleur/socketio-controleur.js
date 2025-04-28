@@ -52,6 +52,11 @@ class SocketIOControleur{
             console.log("port " + portNumero);
         });
     }
+
+    /**
+     * Methode pour recuperer le Serveur
+     * @returns le Serveur
+     */
     getIO(){
         return this.io;
     }

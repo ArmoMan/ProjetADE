@@ -12,6 +12,7 @@ body{
     height: fit-content;   
 }
 .nav-bar h2 {
+    font-size: clamp(1rem, 2.5vw, 2rem);
     margin: 0;
     padding-left: 20px;
 }
@@ -24,6 +25,7 @@ body{
 }
 
 .nav-bar ul li a { 
+    font-size: clamp(0.8rem, 1vw, 1.5rem);
     text-decoration: none; 
     color: black;
 }

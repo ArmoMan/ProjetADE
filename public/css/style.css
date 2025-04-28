@@ -3,8 +3,8 @@ body {
     background: url('/img/background.jpg') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Kanit', sans-serif;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    /* overflow-y: scroll;
+    overflow-x: hidden; */
 }
 .login-signup-container{
     height: 100%;
@@ -39,13 +39,13 @@ body {
     justify-content: center;
 }
 
-h1 {
+.titre-h1 {
     font-size: 3em;
     font-weight: bold;
     color: rgb(255, 255, 255);
 }
 
-h2 {
+.titre-h2 {
     font-size: 2em;
     font-weight: bold;
     color: rgb(0, 0, 0);
