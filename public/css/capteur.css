@@ -10,6 +10,8 @@
     align-items: center;
     justify-content: center;
     margin: 40px;
+
+
     
 }
 .container-capteur {
@@ -21,9 +23,10 @@
     margin-bottom: 40px;
     flex-wrap: wrap;
     width: 100%;
+
 }
 .capteur {
-    background-color: #4db6ac;
+    background-color: #159387; /* 4db6ac */
     color: white;
     width: 250px;
     height: 250px;
