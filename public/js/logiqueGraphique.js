@@ -150,7 +150,46 @@ function calculerMediane(donneesY) {
         return donneesTriees[milieu];
     }
 }
+/**
+ * Méthode pour calculer la moyenne des données sur des intervalles de 24 heures
+* 
+* @param {string[]} donneesX - Les dates
+* @param {number[]} donneesY - Les données numériques correspondantes
+* @returns Un tableau contenant les dates de début de chaque intervalle de 24h et la moyenne correspondante
+*/
+function calculerMoyenneParJour(donneesX, donneesY) {
 
+    var { datesEnOrdre, donneesEnOrdre } = mettreOrdreCroissant(donneesX, donneesY);
+ 
+    const mapDateDonnees = creerUneMap(datesEnOrdre, donneesEnOrdre);
+ 
+    const groupesParJour = {};
+ 
+    mapDateDonnees.forEach(({ date, donnee }) => {
+     var dateChoisi = new Date(date);
+     var jourChoisi = dateChoisi.getDate();
+     var moisChoisi = dateChoisi.getMonth() + 1;
+     var anneeChoisi = dateChoisi.getFullYear();
+ 
+ 
+     const cleJour = `${anneeChoisi}-${moisChoisi.toString().padStart(2, '0')}-${jourChoisi.toString().padStart(2, '0')}`;
+ 
+     if (!groupesParJour[cleJour]) {
+         groupesParJour[cleJour] = [];
+     }
+     groupesParJour[cleJour].push(donnee);
+ });
+ 
+ 
+ const resultats = Object.entries(groupesParJour).map(([date, donnees]) => {
+     const moyenne = calculerMoyenne(donnees);
+     return { date, moyenne };
+ });
+ 
+ return resultats;
+ } 
+ 
+ 
 
 /**
  * Crée la structure de base HTML pour accueillir un graphique Chart.js.
