@@ -5,186 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projet ADE</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Réinitialisation basique */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            background-color: #f5f7fa;
-            line-height: 1.6;
-        }
-
-        /* NAVBAR */
-        nav {
-            width: 100%;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Centrer le logo */
-            padding: 0 2rem;
-            background-color: #f2f5f8; /* Bleu moins foncé */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #3c92dd; /* Blanc pour contraste */
-            text-decoration: none;
-        }
-
-        /* HERO SECTION */
-        .hero-section {
-            background: linear-gradient(130deg, #5ba0c0 0%, #40B0B4 100%); /* Gradient dynamique */
-            text-align: center;
-            padding: 120px 20px;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            line-height: 1.8;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .hero-buttons a {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #ffffff;
-            color: #40B0B4; /* Bleu moins foncé */
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .hero-buttons a:hover {
-            background-color: #40B0B4; /* Bleu moins foncé */
-            color: #ffffff;
-            transform: scale(1.05);
-        }
-
-        /* FEATURES SECTION */
-        .features {
-            display: flex;
-            justify-content: space-around;
-            gap: 2rem;
-            padding: 80px 20px;
-            background-color: #f8f8f8;
-            flex-wrap: wrap;
-        }
-
-        .feature-item {
-            text-align: center;
-            max-width: 300px;
-            background: #fff;
-            border-radius: 12px;
-            padding: 40px 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-item img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-        }
-
-        .feature-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #40B0B4; /* Bleu moins foncé */
-        }
-
-        .feature-item p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        /* FOOTER */
-        footer {
-            background: linear-gradient(130deg, #7f9ea7 0%, #40B0B4 100%); /* Gradient turquoise */
-            color: white;
-            text-align: center;
-            padding: 30px;
-        }
-
-        footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/page-acceuil.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    
 </head>
 <body>
+    <%- include('composants/navbar') %>
 
-    <!-- NAVBAR -->
-    <nav>
+    <!-- <nav>
         <a href="/" class="logo">Projet ADE</a>
-    </nav>
+    </nav> -->
 
-    <!-- HERO SECTION -->
-    <div class="hero-section">
+    <div class="section-haut">
         <h1>Votre Projet ADE</h1>
         <p>Transformez n’importe quel espace en ferme intelligente. Surveillez votre écosystème en temps réel, optimisez vos récoltes et économisez jusqu’à 90 % d’eau. L’agriculture durable, simple et connectée.</p>
-        <div class="hero-buttons">
+        <div class="section-haut-boutton">
             <a href="/login">Connexion</a>
             <a href="/signup">Créer un compte</a>
         </div>
     </div>
 
-    <!-- FEATURES SECTION -->
-    <div class="features">
-        <div class="feature-item">
+    <div class="details">
+        <div class="details-objet">
             <img src="/img/photo1.jpg" alt="photo1">
             <h3>Surveillance en Temps Réel</h3>
             <p>Visualisez instantanément l’état de votre écosystème aquaponique grâce à une interface connectée directement aux capteurs.</p>
         </div>
-        <div class="feature-item">
+        <div class="details-objet"> 
             <img src="/img/photo2.jpg" alt="Eau">
             <h3>Optimisation de l'Eau</h3>
             <p>Réduisez le gaspillage et maximisez l'efficience grâce à un suivi intelligent qui ajuste la consommation en fonction des besoins.</p>
         </div>
-        <div class="feature-item">
+        <div class="details-objet">
             <img src="/img/photo3.jpg" alt="">
             <h3>Production Durable</h3>
             <p>Associez agriculture et pisciculture pour une production locale, saine et respectueuse de l’environnement.</p>
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <p>&copy; 2025 Projet ADE. Tous droits réservés.</p>
     </footer>
