@@ -57,8 +57,8 @@ function mettreOrdreCroissant(datesDesordre, donneesDesordre){
 
 /**
  * Méthode pour transformer deux tableaux, dans ce cas les dates et les données, en un seul tableau combiné.
- * @param {number[]} datesDesordre - Le tableau des dates en désordre.
- * @param {number[]} donneesDesordre - Le tableau des données en désordre.
+ * @param {number[]} datesDesordre est le tableau des dates en désordre.
+ * @param {number[]} donneesDesordre est le tableau des données en désordre.
  * @returns Un tableau combiné associant chaque date à sa donnée correspondante.
  */
 function creerUneMap(datesDesordre, donneesDesordre){
@@ -255,8 +255,8 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
     btnMediane.textContent = "Voir la mediane";
     btnMediane.classList.add("graph-button-bas");
 
-    const medianeCalculee = calculerMediane(donneesY)
     btnMediane.addEventListener('click', () => {
+        const medianeCalculee = calculerMediane(recupererDonneesYGraphiqueCanvas(chartJSGraph))
         ajouterLigneChartjs('mediane','red', medianeCalculee,medianeCalculee,chartJSGraph);
     })
 
@@ -266,8 +266,8 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
     btnMoyenne.textContent = "Voir la moyenne";
     btnMoyenne.classList.add("graph-button-bas");
 
-    const moyenneCalculee = calculerMoyenne(donneesY)
     btnMoyenne.addEventListener('click', () => {
+        const moyenneCalculee = calculerMoyenne(recupererDonneesYGraphiqueCanvas(chartJSGraph))
         ajouterLigneChartjs('moyenne', 'black',moyenneCalculee,moyenneCalculee,chartJSGraph);
     })
 
@@ -411,6 +411,10 @@ function convertirCenK(tableauDonnnees){
     });
 
     return nouveauTableau;
+}
+
+function recupererDonneesYGraphiqueCanvas(chartJSGraph){
+    return chartJSGraph.data.datasets[0].data;
 }
 
 function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
