@@ -280,10 +280,37 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
         button.classList.add("graph-button-bas");
         containerButtons.appendChild(button);
     });
+  // Ajouter dropbox converssion graph
+ 
+  var listeTypeGraphique = document.createElement("select");
+  const listeDesTypesGraphiques = ["line", "bar"]
+      listeDesTypesGraphiques.forEach((typeGraphique) => {
+      var option = document.createElement("option");
+      option.value = typeGraphique;
+      option.textContent = typeGraphique;
 
-    return containerButtons;
+     
+
+      listeTypeGraphique.appendChild(option);
+  });
+
+  listeTypeGraphique.onchange = () => {
+      changerTypeGraphique(chartJSGraph, listeTypeGraphique.value);
+  }
+
+  containerButtons.appendChild(listeTypeGraphique);
+
+
+  return containerButtons;
 }
 
+
+// fonction de modifier le type de graph a partir du dropbox
+
+function changerTypeGraphique(chartJSGraph, typeGraphique){
+  chartJSGraph.config.type = typeGraphique;
+  chartJSGraph.update();
+}
 
 /**
  * Ajoute ou retire dynamiquement une ligne horizontale d'annotation sur un graphique Chart.js.
