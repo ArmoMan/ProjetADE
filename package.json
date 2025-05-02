@@ -28,7 +28,7 @@
     "express-session": "^1.18.1",
     "generate-api-key": "^1.0.2",
     "mysql2": "^3.14.0",
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.10",
     "socket.io": "^4.8.1"
   }
 }
