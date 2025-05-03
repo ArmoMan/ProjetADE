@@ -17,6 +17,7 @@
     border-radius: 20px;
     background-color: white;
     overflow: hidden;
+    cursor:zoom-in;
 }
 
 .canvas-container:hover {
@@ -92,8 +93,46 @@
 }
 
 
+/********* Pour agrandir le graphique *************/
+.fenetre-zoom-graphique{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.462);
+    z-index: 1;
+}
 
-
+.container-zoom-canvas{
+    width: 90vw;
+    height: 90vh;
+    margin-top: 5vh;
+    margin-left: 5vw; 
+    display: flex; 
+    justify-content: center;
+    background-color: white;
+    overflow: scroll;
+}
+.container-zoom-canvas canvas{
+    cursor: grab;
+}
+.fenetre-zoom-fermer-bouton{
+    position: fixed;
+    top: 0;
+    right: 20px;
+    font-size: 30px;
+    font-weight: 900;
+    background-color: white;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 1;
+    border: 2px solid black;
+}
+.fenetre-zoom-fermer-bouton:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.478);
+}
 
 /* A effacer : */
 
