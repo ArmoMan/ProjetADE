@@ -96,6 +96,12 @@ function creerSectionGraphique(typeGraphique, capteur_nom, donnee_nom, donneesX,
     var {canvasContainer,canvasGraph} = creerCanvas(donneesX.length);
     const graphique = creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneesX, donneesY);
 
+    // Ajouter l’option pour agrandir le graphique lorsque le canvas est cliqué
+    canvasContainer.addEventListener('click', () => {
+        var divAgrandirGraphique = creerDivAgrandirGraphique(graphique);
+        document.body.appendChild(divAgrandirGraphique);
+    });
+
     // buttons
     var containerButtons = creerButtons(graphique, donneesY, donnee_nom);
 
@@ -150,12 +156,14 @@ function calculerMediane(donneesY) {
         return donneesTriees[milieu];
     }
 }
+
+
 /**
  * Méthode pour calculer la moyenne des données sur des intervalles de 24 heures
 * 
-* @param {string[]} donneesX - Les dates
-* @param {number[]} donneesY - Les données numériques correspondantes
-* @returns Un tableau contenant les dates de début de chaque intervalle de 24h et la moyenne correspondante
+* @param {string[]} donneesX les dates
+* @param {number[]} donneesY les données numériques correspondantes
+* @returns un tableau contenant les dates de début de chaque intervalle de 24h et la moyenne correspondante
 */
 function calculerMoyenneParJour(donneesX, donneesY) {
 
@@ -166,27 +174,28 @@ function calculerMoyenneParJour(donneesX, donneesY) {
     const groupesParJour = {};
  
     mapDateDonnees.forEach(({ date, donnee }) => {
-     var dateChoisi = new Date(date);
-     var jourChoisi = dateChoisi.getDate();
-     var moisChoisi = dateChoisi.getMonth() + 1;
-     var anneeChoisi = dateChoisi.getFullYear();
+        var dateChoisi = new Date(date);
+        var jourChoisi = dateChoisi.getDate();
+        var moisChoisi = dateChoisi.getMonth() + 1;
+        var anneeChoisi = dateChoisi.getFullYear();
+ 
+
+        // Clé + ajout de zéros devant les mois et jours pour un meilleur affichage
+        const cleJour = `${anneeChoisi}-${moisChoisi.toString().padStart(2, '0')}-${jourChoisi.toString().padStart(2, '0')}`;
+ 
+        if (!groupesParJour[cleJour]) {
+            groupesParJour[cleJour] = [];
+        }
+        groupesParJour[cleJour].push(donnee);
+    });
  
  
-     const cleJour = `${anneeChoisi}-${moisChoisi.toString().padStart(2, '0')}-${jourChoisi.toString().padStart(2, '0')}`;
+    const resultats = Object.entries(groupesParJour).map(([date, donnees]) => {
+        const moyenne = calculerMoyenne(donnees);
+        return { date, moyenne };
+    });
  
-     if (!groupesParJour[cleJour]) {
-         groupesParJour[cleJour] = [];
-     }
-     groupesParJour[cleJour].push(donnee);
- });
- 
- 
- const resultats = Object.entries(groupesParJour).map(([date, donnees]) => {
-     const moyenne = calculerMoyenne(donnees);
-     return { date, moyenne };
- });
- 
- return resultats;
+    return resultats;
  } 
  
  
@@ -269,7 +278,7 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
     btnMoyenne.addEventListener('click', () => {
         const moyenneCalculee = calculerMoyenne(recupererDonneesYGraphiqueCanvas(chartJSGraph))
         ajouterLigneChartjs('moyenne', 'black',moyenneCalculee,moyenneCalculee,chartJSGraph);
-    })
+    });
 
     containerButtons.appendChild(btnMediane);
     containerButtons.appendChild(btnMoyenne);
@@ -280,28 +289,124 @@ function creerButtons(chartJSGraph, donneesY,nomDonneesY){
         button.classList.add("graph-button-bas");
         containerButtons.appendChild(button);
     });
-  // Ajouter dropbox converssion graph
- 
-  var listeTypeGraphique = document.createElement("select");
-  const listeDesTypesGraphiques = ["line", "bar"]
-      listeDesTypesGraphiques.forEach((typeGraphique) => {
-      var option = document.createElement("option");
-      option.value = typeGraphique;
-      option.textContent = typeGraphique;
 
-     
+    // Ajouter dropbox converssion graph
+    var listeTypeGraphique = document.createElement("select");
+    listeTypeGraphique.classList.add("graph-button-bas");
 
-      listeTypeGraphique.appendChild(option);
-  });
+    const listeDesNomDesTypesGraphiques = ["line", "bar"];
+    listeDesNomDesTypesGraphiques.forEach((typeGraphique) => {
+        var option = document.createElement("option");
+        option.value = typeGraphique;
+        option.textContent = typeGraphique;
 
-  listeTypeGraphique.onchange = () => {
-      changerTypeGraphique(chartJSGraph, listeTypeGraphique.value);
-  }
+        listeTypeGraphique.appendChild(option);
+    });
 
-  containerButtons.appendChild(listeTypeGraphique);
+    listeTypeGraphique.onchange = () => {
+        changerTypeGraphique(chartJSGraph, listeTypeGraphique.value);
+    };
+
+    containerButtons.appendChild(listeTypeGraphique);
+
+    //////////// Ajouter un bouton pour afficher les donnees de 24h ////////////////
+    var boutonDonneesParJour = creerBoutonAfficherDonneesParJour(chartJSGraph);
+    containerButtons.appendChild(boutonDonneesParJour);
+
+    return containerButtons;
+}
+
+/**
+ * Methode pour créer un bouton permettant de basculer l'affichage du graphique entre les données originales et les moyennes calculées par jour.
+ *
+ * @param {Chart} chartJSGraph graphique Chart.js à modifier.
+ * @returns le bouton en question
+ */
+function creerBoutonAfficherDonneesParJour(chartJSGraph){
+    // Sauvegarder les données originales pour pouvoir les restaurer plus tard
+    const donneesXOriginales = chartJSGraph.data.labels;
+    const donneesYOriginales = chartJSGraph.data.datasets[0].data;
+    const nomDonneesY = chartJSGraph.data.datasets[0].label;
+
+    //////////// Ajouter un bouton pour afficher les donnees de 24h ////////////////
+    var boutonDonneesParJour = document.createElement("button");
+    boutonDonneesParJour.textContent = "Afficher au format 24h";
+    boutonDonneesParJour.classList.add("graph-button-bas");
+
+    // Calculer la moyenne
+    const tableauDeMoyenneParJour = calculerMoyenneParJour(donneesXOriginales, donneesYOriginales);
+
+    // Créer deux tableaux. Un pour les dates et un pour les moyennes.
+    const dates = tableauDeMoyenneParJour.map(dict => dict.date);
+    const moyennes = tableauDeMoyenneParJour.map(dict => dict.moyenne);
+
+    // Afficher
+    var estBoutonDonneesParJourActif = false;
+    boutonDonneesParJour.addEventListener('click', () => {
+        
+        if(estBoutonDonneesParJourActif){
+            // Revenir aux données originales
+            changerXYDonneesGraphique(chartJSGraph, nomDonneesY,donneesXOriginales,donneesYOriginales);
+
+        }else{
+            // Afficher les moyennes par jour
+            changerXYDonneesGraphique(chartJSGraph, nomDonneesY, dates, moyennes);
+        }
+
+        estBoutonDonneesParJourActif = !estBoutonDonneesParJourActif;
+    });
+
+    return boutonDonneesParJour;
+}
 
 
-  return containerButtons;
+/**
+ * Méthode pour créer une div affichée par-dessus tout, contenant un graphique.
+ * @param {Chart} chartJSGraph est le graphique Chart.js à afficher dans la div.
+ * @returns une div contenant le graphique.
+ */
+function creerDivAgrandirGraphique(chartJSGraph){
+    const fenetreZoom = document.createElement('div');
+    fenetreZoom.className = 'fenetre-zoom-graphique';
+
+    const fermerBtn = document.createElement('p');
+    fermerBtn.className = 'fenetre-zoom-fermer-bouton';
+    fermerBtn.textContent = 'fermer';
+    fermerBtn.addEventListener('click', () => {
+        fenetreZoom.remove();
+    });
+
+    const canvasContainer = document.createElement('div');
+    canvasContainer.className = 'container-zoom-canvas';
+
+    const canvas = document.createElement('canvas');
+    canvasContainer.appendChild(canvas);
+
+    // Cloner le graphique dans un canvas différent
+    const typeGraphique = chartJSGraph.config.type;
+    const capteurNom = chartJSGraph.options.plugins.title.text;
+    const donneeNom = chartJSGraph.data.datasets[0].label;
+    const donneeX = chartJSGraph.data.labels;
+    const donneeY = chartJSGraph.data.datasets[0].data;
+    const cloneGraphiqueCanvas = creerGraphiqueStatique(canvas, typeGraphique, capteurNom, donneeNom, donneeX, donneeY);
+
+    // Changer de taille 
+    cloneGraphiqueCanvas.config.options.responsive = true;
+
+    // Activer le zoom et la navigation sur le graphique
+    cloneGraphiqueCanvas.options.plugins.zoom.pan.enabled = true;
+    cloneGraphiqueCanvas.options.plugins.zoom.zoom.wheel.enabled = true;
+    cloneGraphiqueCanvas.options.plugins.zoom.zoom.pinch.enabled = true;
+
+
+    cloneGraphiqueCanvas.resize();  
+    cloneGraphiqueCanvas.update();
+
+    
+    fenetreZoom.appendChild(fermerBtn);
+    fenetreZoom.appendChild(canvasContainer);
+
+    return fenetreZoom;
 }
 
 
@@ -364,6 +469,31 @@ function changerYDonneesGraphique(chartJSGraph, label, data){
 }
 
 /**
+ * Méthode pour changer les données x d'un graphique Chart.js
+ * @param {Chart} chartJSGraph est le graphique Chart.js à modifier
+ * @param {number[]} data est la liste des nouvelles valeurs en x
+ */
+function changerXDonneesGraphique(chartJSGraph, data){
+    // changer de donnees x
+    if (chartJSGraph.data.labels.length > 0) {
+        chartJSGraph.data.labels = data;
+    }
+    chartJSGraph.update()
+}
+
+/**
+ * Méthode pour changer les données x et y d'un graphique Chart.js
+ * @param {Chart} graphChartJS est le graphique Chart.js à modifier
+ * @param {string} label est le nom de la série de données
+ * @param {number[]} dataX est la liste des nouvelles valeurs en x
+ * @param {number[]} dataY est la liste des nouvelles valeurs en y
+ */
+function changerXYDonneesGraphique(chartJSGraph, label, dataX, dataY){
+    changerXDonneesGraphique(chartJSGraph, dataX);
+    changerYDonneesGraphique(chartJSGraph, label, dataY);
+}
+
+/**
  * Méthode pour détecter les données à convertir selon le titre de l'axe Y et créer un bouton de conversion avec sa logique
  * @param {string} nomDonneesY Le nom des données de l'axe Y
  * @param {number[]} donneesY Le tableau des données en Y
@@ -419,7 +549,7 @@ function recupererDonneesYGraphiqueCanvas(chartJSGraph){
 
 function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_nom, donneeX, donneeY) {
     // création du graphique
-    return new Chart(canvasGraph, {
+    const notreChart = new Chart(canvasGraph, {
         type: typeGraphique,
         data: {
             labels: donneeX,
@@ -442,9 +572,19 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
                 },
                 annotation: {
                     annotations:{}
+                },
+                zoom: {
+                    pan:{
+                        enabled: true,
+                        mode:"xy"
+                    },
+                    zoom:{
+                        pinch: { enabled: true },
+                        wheel: {enabled: true},
+                        mode: "xy"
+                    }
                 }
             },
-
             scales: {
                 y: {
                     beginAtZero: true
@@ -453,4 +593,15 @@ function creerGraphiqueStatique(canvasGraph, typeGraphique, capteur_nom, donnee_
         }
 
     });
+
+    /*
+    Commencer avec ces options à true afin de pouvoir les désactiver et les réactiver plus tard si nécessaire.
+    Si on les définit à false dès la création, elles ne fonctionneront plus par la suite.
+    */
+    notreChart.options.plugins.zoom.pan.enabled = false;
+    notreChart.options.plugins.zoom.zoom.wheel.enabled = false;
+    notreChart.options.plugins.zoom.zoom.pinch.enabled = false;
+    notreChart.update();
+
+    return notreChart;
 }
