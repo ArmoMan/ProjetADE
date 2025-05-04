@@ -20,8 +20,10 @@
         <h1>Votre Projet ADE</h1>
         <p>Transformez n’importe quel espace en ferme intelligente. Surveillez votre écosystème en temps réel, optimisez vos récoltes et économisez jusqu’à 90 % d’eau. L’agriculture durable, simple et connectée.</p>
         <div class="section-haut-boutton">
-            <a href="/login">Connexion</a>
-            <a href="/signup">Créer un compte</a>
+            <% if(!estConnecter){ %>
+                <a href="/login">Connexion</a>
+                <a href="/signup">Créer un compte</a>
+            <% } %>
         </div>
     </div>
 
