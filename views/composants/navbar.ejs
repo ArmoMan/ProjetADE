@@ -1,6 +1,13 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <nav class="nav-bar"> 
     <h2><a href="/" style="text-decoration: none; color: black;">Projet ADE</a></h2>
-    <ul>
+    
+
+    <ul class="navbar-liste">
+        <div class="nav-bouton-container">
+            <button class="nav-bar-bouton" onclick="ouvrirNavBar(this)"><i class="fa fa-bars"></i></button>
+        </div>
         <% if(estConnecter){ %>
             <li><a href="/utilisateur/accueil">Regarder Donnees</a></li>
             <li><a href="/utilisateur/pageAPI">Voir cle API</a></li>
@@ -12,3 +19,70 @@
         <% } %>
     </ul>
 </nav>
+
+<script>
+    
+    let estMobile = false;
+
+
+    // Méthode pour ouvrir ou fermer la barre de navigation (le menu)
+    function ouvrirNavBar(bouton){
+        // Changer le boolean 
+        estMobile = !estMobile;
+
+        // Afficher la liste des items
+        const navbarListe = document.querySelectorAll('.navbar-liste li');
+        const estListeVisible = navbarListe[0].style.display === "block";
+
+        navbarListe.forEach(lien => {
+            lien.style.display = estMobile ? "block" : "none";
+        });
+
+        // cacher le titre
+        const titre = document.querySelector('.nav-bar h2');
+        titre.style.display = estMobile ? "none" : "block";
+
+        // mettre le ul 100%
+        const ul = document.querySelector('.nav-bar ul');
+        ul.style.width = estMobile ? "100%":"auto";
+
+        // modifier la forme du bouton
+        bouton.querySelector('i').classList.toggle("fa-bars");
+        bouton.querySelector('i').classList.toggle("fa-times");
+
+    }
+
+    // Méthode pour réinitialiser les paramètres de la barre de navigation pour l'affichage en grand écran
+    function recommencerNavBarGrandEcran(){
+        const titre = document.querySelector('.nav-bar h2');
+        const navbarListe = document.querySelectorAll('.navbar-liste li');
+        const ul = document.querySelector('.nav-bar ul');
+        const forme = document.querySelector('.nav-bar-bouton i');
+
+        estMobile = false;
+
+        titre.style.display = "block";
+
+        navbarListe.forEach(lien => {
+            lien.style.display = "block";
+        });
+
+        ul.style.width = "auto";
+
+        forme.classList.remove("fa-times");
+        forme.classList.add("fa-bars");
+    }
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 600) {
+            recommencerNavBarGrandEcran();
+        }else{
+            // Cacher les liens pour commencer (dans mobile)
+            const navbarListe = document.querySelectorAll('.navbar-liste li');
+            navbarListe.forEach(lien => {
+                lien.style.display = "none";
+            });
+        }
+    });
+</script>
+

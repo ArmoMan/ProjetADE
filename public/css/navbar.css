@@ -24,12 +24,33 @@ body{
     gap: 15px;
     padding-right: 20px;
 }
-
+.nav-bar ul li { 
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-bouton-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; 
+}
+.nav-bar-bouton{
+    display:none;
+    font-size: 30px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+.nav-bar-bouton:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.442);
+}
 .nav-bar ul li a { 
     font-size: clamp(0.8rem, 1vw, 1.5rem);
     text-decoration: none; 
     margin: 9px;
     color: black;
+    white-space: nowrap;
 }
 .nav-bar ul li:hover{ 
     /*background-color: rgb(17, 85, 57);*/
@@ -37,3 +58,25 @@ body{
     transform: scale(1.05);
     transition: all 0.2s ease-in-out;
 }
+
+
+/***************** Mobile ***************/
+@media only screen and (max-width: 600px) {
+    .nav-bar-bouton{
+        display:block;
+    }
+    .nav-bar ul{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+    .nav-bar ul li{
+        display: none;
+        width: 100%;
+    }
+    .nav-bar ul li a{
+        background-color: white;
+        width: 100px;
+    }
+  }
