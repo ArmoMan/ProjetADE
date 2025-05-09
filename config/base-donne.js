@@ -1,8 +1,11 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
+/**
+ * Classe pour créer une connexion à la base de données et qui permet aussi de recommencer les tables
+ */
 class BaseDonne{
-    // Classe pour créer une connexion à la base de données et qui permet aussi de recommencer les tables
+    
     constructor(){
         this.poolConnexion = mysql.createPool({
             host: process.env.DB_HOST,

@@ -1,5 +1,12 @@
+/**
+ * Classe responsable de la récupération périodique (toutes les 30 secondes) des données des capteurs et de leur affichage dans des boîtes.
+ * Fournit également les fonctionnalités de contrôle des capteurs actionnables.
+ */
 class DonneesLive {
-  // Méthode pour récupérer les données live et les afficher dans des boîtes
+
+  /**
+   * Méthode pour récupérer les données live et les afficher dans des boîtes
+   */
   async #creeBoiteDonneesLive() {
     try {
       // On recupere les données en temps réel avec le POST
@@ -54,7 +61,14 @@ class DonneesLive {
     }
   }
 
-   #creerButtonAction(estActionner, nomCapteur,valeurDonneeDiv) {
+  /**
+  * Méthode pour créer un bouton permettant d'allumer ou d'éteindre un capteur.
+  * @param {number} estActionner est de 1 pour éteindre, 0 pour allumer.
+  * @param {string} nomCapteur set le nom du capteur concerné.
+  * @param {HTMLDivElement} valeurDonneeDiv -est le div dans lequel afficher la valeur selon le clic du bouton.
+  * @returns {HTMLButtonElement} Le bouton HTML créé.
+  */
+  #creerButtonAction(estActionner, nomCapteur,valeurDonneeDiv) {
     const button = document.createElement("button");
     button.className = "button-normal";
 
@@ -79,6 +93,11 @@ class DonneesLive {
     return button;
   }
 
+/**
+ * Méthode pour envoyer une requête post afin d'activer ou d'éteindre un capteur.
+ * @param {string} nomCapteur est le nom du capteur à activer ou désactiver.
+ * @returns {boolean} true si l'action a réussi, false en cas d'échec.
+ */
   async #activerCapteur(nomCapteur) {
     const response = await fetch("/capteurs/actionner", {
       method: "POST",
@@ -99,13 +118,15 @@ class DonneesLive {
     }
   }
 
-  // On rafraichit les données à chaque 30 secondes
+  /**
+  * Méthode pour rafraîchir les données et mettre à jour l'affichage toutes les 30 secondes.
+  */
   startRafraichissement() {
     // appeler une premiere fois
     this.#creeBoiteDonneesLive();
 
     setInterval(() => {
       this.#creeBoiteDonneesLive();
-    }, 30000); //  = 30 secondes
+    }, 30000);
   }
 }

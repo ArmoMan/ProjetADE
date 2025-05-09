@@ -1,8 +1,20 @@
 const baseDonne = require("./base-donne");
  
+/**
+ * DBCapteur est une classe qui fait appel à BaseDonne pour interagir avec la table des capteurs.
+ * Elle permet d’ajouter, de supprimer et de récupérer les données des capteurs.
+ */
 class DBCapteur {
  
-    // Ajouter un capteur avec ses données
+    /**
+     * Méthode pour ajouter dans la base de données les données récupérées par un capteur.
+     * @param {string} cle_api est la clé apu de l'utilisateur
+     * @param {string} capteur_nom est le nom du capteur
+     * @param {string} donnee_nom est nom de la donnée (exemple : Temperature C)
+     * @param {number} donnee_valeur est la valeur récupérée par le capteur
+     * @param {boolean} est_actionnable true pour un capteur actionnable, false pour les autres
+     * @returns {boolean} true si l’ajout a été réussi et sinon false. 
+     */
     async ajouterCapteur(cle_api, capteur_nom, donnee_nom, donnee_valeur, est_actionnable) {
         try {
             // Vérifier si la clé API existe avant d’insérer un capteur
@@ -23,18 +35,34 @@ class DBCapteur {
         }
     }
  
-    // Supprimer un capteur spécifique en fonction de son nom et de la clé API
+    
+    /**
+     * Méthode pour supprimer un capteur spécifique en fonction de son nom et de la clé API.
+     * @param {string} capteur_nom est le nom du capteur qu’on veut supprimer
+     * @param {string} cle_api est la clé API que le capteur utilise et qu’on veut supprimer
+     * @returns {boolean} true si cela a été réussi, sinon false.
+     */
     async supprimerCapteur(capteur_nom, cle_api) {
         try {
             const [result] = await baseDonne.poolConnexion.query("DELETE FROM capteur WHERE capteur_nom = ? AND cle_api = ?", [capteur_nom, cle_api]);
-            return result.affectedRows > 0; // Retourne `true` si suppression réussie, sinon `false`
+            return result.affectedRows > 0;
         } catch (err) {
             console.error("Erreur lors de la suppression du capteur :", err);
             return false;
         }
     }
  
-    // Récupérer les données des capteurs pour une clé API donnée
+    /**
+     * Méthode pour récupérer les données des capteurs associées à une clé API donnée.
+     * Ça regroupe toutes les valeurs et leurs dates de création par capteur, puis retourne un tableau.
+     * 
+     * Chaque élément du tableau contient :
+     * le nom du capteur, le nom de la donnée, un boolean qui indique si le capteur est actionnable, 
+     * une liste des valeurs collectées, une liste des dates de la collecte de chaque valeur.
+     * 
+     * @param {string} cle_api est la clé api du client dont on veut récupérer les données.
+     * @returns un tableau d’objets contenant les données des capteurs si la requête réussit ou un { error: "Impossible de récupérer les données des capteurs." }; en cas d’échec.
+     */
     async recupererDonnees(cle_api) {
         try {
             const [rows] = await baseDonne.poolConnexion.query(`
