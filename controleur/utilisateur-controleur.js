@@ -2,10 +2,15 @@ const bdUtilisateur = require("../config/bd-utilisateur");
 const utilisateur = new bdUtilisateur();
 const { generateApiKey } = require('generate-api-key');
 
+ /**
+ * Classe responsable de la gestion de l'authentification (req, res, next), de la création de compte et de la connexion.
+ * La esponsabilité principale est de gérer la logique, les erreurs et les sessions.
+ * Contrairement à BDUtilisateur, elle gère les erreurs et les renvoie dans un format uniforme { estReussi: boolean, message: string }
+ */
 class UtilisateurControleur {
 
     
-      /**
+    /**
      * Vérifier que l'utilisateur existe dans la session et dans la base de données
      * 
      * @param {*} req requête express.
@@ -40,7 +45,7 @@ class UtilisateurControleur {
      * 
      * @param {string} email est l'adresse email de l'utilisateur.
      * @param {string} pass est le mot de passe de l'utilisateur.
-     * @returns  { estReussi: boolean, message: string , cle_api: string};
+     * @returns  { estReussi: boolean, message: string , cle_api: string} ou echec: { estReussi: boolean, message: string};
      */
     async creerCompte(email, pass) {
         const CLE_API = await this.genererAPI(); 

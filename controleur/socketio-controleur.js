@@ -14,7 +14,7 @@ class SocketIOControleur{
 
     /**
      * Methode pour commencer la connexion. Si utilisaqteur cle existant, alors le faire entrer dans un room avec le nom de cle.
-     * @param {*} portNumero  est le numero du port pour le socketio. Ex: 4545
+     * @param {number} portNumero  est le numero du port pour le socketio. Ex: 4545
      */
     commencer(portNumero){
         const socketServeur = http.createServer();

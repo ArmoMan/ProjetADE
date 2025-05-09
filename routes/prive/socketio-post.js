@@ -114,6 +114,7 @@ async function enregistrerDonneesChaque() {
   
 
 }
+
 // recuperer et enregistrer donnees chaque 10 minutes
 setInterval(enregistrerDonneesChaque, 600000);
 
