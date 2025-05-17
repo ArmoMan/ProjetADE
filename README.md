@@ -92,6 +92,9 @@ Vous avez deux options pour utiliser le site du ProjetADE. La première est d’
 | 9 | Suivez les étapes de la section [Sur le site ProjetADE](#sur-le-site-projetade).|
 | 10 | Voilà !|
 
+## Diagramme des fichiers du NodeJS 
+Pour plus de détails à propos de ce diagramme, consultez notre documentation Word.
+![Diagramme des fichiers du NodeJS ](./public/img/diagrammefichier.drawio.png)
 
 ## Installations
 ---
