@@ -20,6 +20,7 @@ L’aquaponie est un écosystème interdépendant qui combine l’agriculture et
 * [Guide d’utilisation](#guide-dutilisation)
     * [Option 1: Sur le site ProjetADE](#option-1-sur-le-site-projetade)
     * [Option 2: Héberger vous-même le site](#option-2-héberger-vous-même-le-site)
+* [Diagramme des fichiers du NodeJS](#diagramme-des-fichiers-du-nodejs)
 * [Installations](#installations)
     * [Installation des bibliothèques](#installation-des-bibliothèques)
         * [Connexion](#connexion)
