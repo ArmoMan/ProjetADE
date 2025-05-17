@@ -1,10 +1,10 @@
 # ProjetADE
 
 ---
-| :warning: Attention                              |
-|:-----------------------------------------------:|
+| :warning: Attention|
+|:-----------------------:|
 | Ce dépôt GitHub concerne le site du ProjetADE, qui permet de visualiser les données et de contrôler les capteurs.    |
-| Pour consulter le site pour le Raspberry Pi, rendez-vous sur le [Projet ADE](https://github.com/ArmoMan/ProjetADE-Client). |
+| Pour consulter le code pour le Raspberry Pi, rendez-vous sur le [Projet ADE Client](https://github.com/ArmoMan/ProjetADE-Client). |
 ---
 
 ## Aquaponie
