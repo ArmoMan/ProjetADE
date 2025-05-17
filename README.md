@@ -93,6 +93,15 @@ Vous avez deux options pour utiliser le site du ProjetADE. La première est d’
 | 9 | Suivez les étapes de la section [Sur le site ProjetADE](#sur-le-site-projetade).|
 | 10 | Voilà !|
 
+> [!NOTE]  
+> La clé API va être passée dans l'URL, car autrement cela crée des conflits avec Cloudflare et Nginx.  
+>
+> Si vous hébergez vous-même et que le code retourne une erreur liée à la connexion Socket.IO ou à une clé API indéfinie, vous pouvez utiliser dans `socketio-controleur.js` :  
+> `const cleApi = socket.handshake.headers['cle_api'];`  
+> 
+> Dans ce cas, il faut également modifier le code de ProjetADE-Client, dans le fichier `socketio_client.py`, et utiliser :  
+> `self.sio.connect(self.__lien, headers={"cle_api": self.__cle_api})`.
+
 ## Diagramme des fichiers du NodeJS 
 Pour plus de détails à propos de ce diagramme, consultez notre documentation Word.
 ![Diagramme des fichiers du NodeJS ](./public/img/diagrammefichier.drawio.png)

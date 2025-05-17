@@ -23,7 +23,18 @@ class SocketIOControleur{
         this.io.on('connection', async (socket)=> {
             console.log("connexion")
             try{
+
+                /* 
+                
+                Avec Nginx et Clouflare, le code suivant ne fonctionnait pas, donc je l'ai remplacé par .handshake.query.cle_api en passant la clé directement dans l'url.
+
+                Si vous allez faire passer les paramètres dans les "headers" sur le code du Raspberry Pi, alors utilisez ce code :
                 const cleApi = socket.handshake.headers['cle_api'];
+
+                */
+                const cleApi = socket.handshake.query.cle_api;
+
+                console.log("cle api" + cleApi)
 
                 if (!cleApi) {
                     socket.disconnect(true);
