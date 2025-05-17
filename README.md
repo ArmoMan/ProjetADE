@@ -179,4 +179,7 @@ Cette bibliothèque est utilisée pour afficher des graphiques dans les pages HT
 ### Optionnel
 
 #### node-cron
-Cette bibliothèque permet d'exécuter une tâche à intervalles réguliers sans bloquer entièrement le code, contrairement à l'utilisation de sleep(). Elle est idéale pour automatiser des commandes répétitives, comme la récupération des données des appareils connectés toutes les x minutes. Cette bibliothèque est optionnelle et n’est pas utilisée dans notre projet actuel, car la seule tâche requise est d’appeler une méthode toutes les 10 minutes, ce qui est facilement réalisable avec setInterval(). Ajouter node-cron alourdirait inutilement le projet. Toutefois, si une exécution à une heure précise devient nécessaire dans le futur, cette technologie pourrait alors être envisagée.
+```
+npm i node-cron
+```
+Cette [bibliothèque](https://www.npmjs.com/package/node-cron) permet d'exécuter une tâche à intervalles réguliers sans bloquer entièrement le code, contrairement à l'utilisation de sleep(). Elle est idéale pour automatiser des commandes répétitives, comme la récupération des données des appareils connectés toutes les x minutes. Cette bibliothèque est optionnelle et n’est pas utilisée dans notre projet actuel, car la seule tâche requise est d’appeler une méthode toutes les 10 minutes, ce qui est facilement réalisable avec setInterval(). Ajouter node-cron alourdirait inutilement le projet. Toutefois, si une exécution à une heure précise devient nécessaire dans le futur, cette technologie pourrait alors être envisagée.
