@@ -28,6 +28,7 @@ L’aquaponie est un écosystème interdépendant qui combine l’agriculture et
         * [Base de données](#base-de-données)
         * [Sécurité et authentification](#sécurité-et-authentification)
         * [Pour le site](#pour-le-site)
+        * [Pour le développement](#pour-le-développement)
         * [Optionnel](#optionnel)
 
 ## Projet ADE
@@ -188,7 +189,7 @@ Aucune installation nécessaire : la bibliothèque est importée directement via
 Cette bibliothèque est utilisée pour afficher des graphiques dans les pages HTML.
 
 ---
-### Optionnel
+### Pour le développement
 
 #### nodemon
 ```
