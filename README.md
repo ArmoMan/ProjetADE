@@ -188,6 +188,16 @@ Aucune installation nécessaire : la bibliothèque est importée directement via
 Cette bibliothèque est utilisée pour afficher des graphiques dans les pages HTML.
 
 ---
+### Optionnel
+
+#### nodemon
+```
+npm i nodemon
+
+```
+Cette [bibliothèque](https://www.npmjs.com/package/nodemon) facilite le développement. Elle redémarre le serveur lorsqu’un fichier est modifié.
+
+---
 
 ### Optionnel
 
