@@ -31,7 +31,6 @@ router.post('/actionner',utilisateurControleur.authentifier, async (req,res) => 
 router.post('/chercher-donnees',utilisateurControleur.authentifier, async (req,res) => {
     try{
         const donnees = await dbCapteur.recupererDonnees(req.session.cle_api);
-        console.log("dans donnees")
         if(donnees && donnees.error){
             return res.json({success:false, donnees:donnees.error });
         }
@@ -81,7 +80,6 @@ let estCeQueChercherDonnees = false;
  * @returns rien
  */
 async function enregistrerDonneesChaque() {
-    console.log("dans enregistrerDonneesChaque")
     if(estCeQueChercherDonnees) return;
     estCeQueChercherDonnees = true;
 
